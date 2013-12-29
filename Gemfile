@@ -1,5 +1,11 @@
 source 'https://rubygems.org'
 
+group :development, :test do
+  gem 'rspec'
+  gem 'rspec-rails'
+  gem 'jasmine'
+end
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.2'
 
