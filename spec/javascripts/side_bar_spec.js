@@ -1,9 +1,10 @@
-describe("Menu", function() {
+describe("Side Bar", function() {
 
   beforeEach(function() {
 
-    // Mock ajax requests to server.
+    // Mock ajax requests to server to start game.
     spyOn($, "ajax").and.callFake(function(options) {
+      Game.id = 1;
       Crafty.scene('Game');
     });
 
@@ -18,27 +19,20 @@ describe("Menu", function() {
     Game.params.numberOfBats = 4;
     Game.params.numberOfArrrows = 2;
 
+    // Reset sidebar.
+    Game.sideBar = undefined;
+  
     Game.start();
   });
 
-  it("side bar has correct width and height", function() {
+  it("has correct width and height", function() {
     expect(Game.sideBar.w).toEqual(160);
     expect(Game.sideBar.h).toEqual(306);
   });
 
-  it("side bar is in correct position", function() {
+  it("is in correct position", function() {
     expect(Game.sideBar.x).toEqual(0);
     expect(Game.sideBar.y).toEqual(0);
-  });
-
-  it("top bar has correct width and height", function() {
-    expect(Game.topBar.w).toEqual(384);
-    expect(Game.topBar.h).toEqual(50);
-  });
-
-  it("top bar is in correct position", function() {
-    expect(Game.topBar.x).toEqual(160);
-    expect(Game.topBar.y).toEqual(0);
   });
 
   it("has rows slider with number of rows param", function() {
@@ -64,9 +58,11 @@ describe("Menu", function() {
   describe("on new game", function() {
 
     var oldSideBar;
-    var oldTopBar;
     var oldRowsSlider;
-    var oldColumnSlider;
+    var oldColumnsSlider;
+    var oldPitsSlider;
+    var oldBatsSlider;
+    var oldArrowsSlider;
     var oldNewGameButton;
 
     beforeEach(function() {
@@ -77,35 +73,29 @@ describe("Menu", function() {
 
       // Keep old bars, sliders and buttons.
       oldSideBar = Game.sideBar;
-      oldTopBar = Game.topBar;
       oldRowsSlider = Game.rowsSlider;
       oldColumnsSlider = Game.columnsSlider;
+      oldPitsSlider = Game.pitsSlider;
+      oldBatsSlider = Game.batsSlider;
+      oldArrowsSlider = Game.arrowsSlider;
       oldNewGameButton = Game.newGameButton;
 
       // Start new game.
       Game.newGameButton.click();
     });
 
-    it("has correct width and height", function() {
-      expect($(Crafty.stage.elem).width()).toEqual(480);
-      expect($(Crafty.stage.elem).height()).toEqual(370);
-    });
-
-    it("side bar is resized", function() {
+    it("is resized", function() {
       expect(Game.sideBar.w).toEqual(160);
       expect(Game.sideBar.h).toEqual(370);
     });
 
-    it("top bar is resized", function() {
-      expect(Game.topBar.w).toEqual(320);
-      expect(Game.topBar.h).toEqual(50);
-    });
-
-    it("bars, sliders and buttons are persistent", function() {
+    it("is persistent and its sliders and buttons are as well", function() {
       expect(Game.sideBar).toEqual(oldSideBar);
-      expect(Game.topBar).toEqual(oldTopBar);
       expect(Game.rowsSlider).toEqual(oldRowsSlider);
       expect(Game.columnsSlider).toEqual(oldColumnsSlider);
+      expect(Game.pitsSlider).toEqual(oldPitsSlider);
+      expect(Game.batsSlider).toEqual(oldBatsSlider);
+      expect(Game.arrowsSlider).toEqual(oldArrowsSlider);
       expect(Game.newGameButton).toEqual(oldNewGameButton);
     });
   });

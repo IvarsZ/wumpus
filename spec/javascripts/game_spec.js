@@ -23,4 +23,22 @@ describe("Game", function() {
     expect($(Crafty.stage.elem).width()).toEqual(544);
     expect($(Crafty.stage.elem).height()).toEqual(306);
   });
+
+  describe("on new game", function() {
+
+    beforeEach(function() {
+
+      // Change slider values.
+      Game.rowsSlider.setValue(10);
+      Game.columnsSlider.setValue(10);
+
+      // Start new game.
+      Game.newGameButton.click();
+    });
+
+    it("is resized", function() {
+      expect($(Crafty.stage.elem).width()).toEqual(480);
+      expect($(Crafty.stage.elem).height()).toEqual(370);
+    });
+  });
 });

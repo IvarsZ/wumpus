@@ -51,6 +51,7 @@ Scenes = {
         if (data.ok) {
           this.id = data.id;
           Crafty.scene('Game');
+          Scenes.updateNotifications(data);
         }
         else {
           alert("Server error: ", data.error);
@@ -60,6 +61,12 @@ Scenes = {
         alert("Couldn't connect to server refresh page to try again");
       }
     });
+  },
+
+  updateNotifications: function(data) {
+    Game.pitsIcon.visible = data.nearby_pit;
+    Game.wumpusIcon.visible = data.nearby_wumpus;
+    Game.treasureIcon.visible = data.nearby_treasure;
   },
 
   buildSideBar: function(height) {
@@ -111,6 +118,39 @@ Scenes = {
         h: Game.topBarHeight
       })
       .color(Game.colors.topBar);
+
+    // Notification icons.
+    var iconPadding = 9;
+    var iconOffsetX = 50;
+    Game.pitsIcon = Crafty.e("2D, Canvas, Color")
+      .color("rgb(120, 75, 40)")
+      .attr({
+        x: Game.sideBarWidth + iconPadding,
+        y: iconPadding,
+        w: Game.tile.width,
+        h: Game.tile.height
+      });
+    Game.pitsIcon.visible = false;
+
+    Game.wumpusIcon = Crafty.e("2D, Canvas, Color")
+      .color("rgb(120, 75, 40)")
+      .attr({
+        x: Game.sideBarWidth + iconPadding + iconOffsetX,
+        y: iconPadding,
+        w: Game.tile.width,
+        h: Game.tile.height
+      });
+    Game.wumpusIcon.visible = false;
+
+    Game.treasureIcon = Crafty.e("2D, Canvas, Color")
+      .color("rgb(120, 75, 40)")
+      .attr({
+        x: Game.sideBarWidth + iconPadding + 2 * iconOffsetX,
+        y: iconPadding,
+        w: Game.tile.width,
+        h: Game.tile.height
+      });
+    Game.treasureIcon.visible = false;
   },
 
   resizeTopBar: function(width) {
