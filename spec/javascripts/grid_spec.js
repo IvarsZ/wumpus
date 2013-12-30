@@ -4,6 +4,12 @@ describe("Grid component", function() {
 
   beforeEach(function() {
 
+    // Mock ajax requests to server to start game.
+    spyOn($, "ajax").and.callFake(function(options) {
+      Game.id = 1;
+      Crafty.scene('Game');
+    });
+
     Game.tile.width = 32;
     Game.tile.height = 32;
     Game.sideBarWidth = 160;

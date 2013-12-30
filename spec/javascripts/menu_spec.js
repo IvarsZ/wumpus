@@ -2,6 +2,11 @@ describe("Menu", function() {
 
   beforeEach(function() {
 
+    // Mock ajax requests to server.
+    spyOn($, "ajax").and.callFake(function(options) {
+      Crafty.scene('Game');
+    });
+
     Game.tile.width = 32;
     Game.tile.height = 32;
     Game.sideBarWidth = 160;

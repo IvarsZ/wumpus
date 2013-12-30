@@ -7,8 +7,7 @@ Game = {
     Crafty.init(544, 306);
     Crafty.background(Game.colors.background);
 
-    // Simply start the 'Game' scene to get things going.
-    Crafty.scene("Game");
+    Scenes.createGame();
   },
 
   // Stop and clear the game.
@@ -20,7 +19,16 @@ Game = {
   params: {
 
     numberOfRows: 8,
-    numberOfColumns: 12
+    numberOfColumns: 12,
+
+    toAjaxData: function() {
+      return {
+        "game" : {
+          "number_of_rows" : this.numberOfRows,
+          "number_of_columns" : this.numberOfColumns
+        }
+      };
+    }
   },
 
   tile: {
@@ -37,6 +45,10 @@ Game = {
     sideBar: "rgb(60, 60, 60)",
     topBar: "rgb(150, 150, 150)",
     text: "rgb(256, 256, 256)"
+  },
+
+  urls: {
+    createGame: "games/create"
   }
 }
 

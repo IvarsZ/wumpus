@@ -34,8 +34,29 @@ Scenes = {
     Game.params.numberOfRows = Game.rowsSlider.getValue();
     Game.params.numberOfColumns = Game.columnsSlider.getValue();
 
-    // Reload game.
-    Crafty.scene('Game');
+    // Create new game.
+    Scenes.createGame();
+  },
+
+  // Connect to server and create the game.
+  createGame: function() {
+    $.ajax({
+      url : Game.urls.createGame,
+      type : "POST",
+      data : Game.params.toAjaxData(),
+      success : function(data) {
+        if (data.ok) {
+          this.id = data.id;
+          Crafty.scene('Game');
+        }
+        else {
+          alert("Server error: ", data.error);
+        }
+      },
+      error: function() {
+        alert("Couldn't connect to server refresh page to try again");
+      }
+    });
   },
 
   buildSideBar: function(height) {

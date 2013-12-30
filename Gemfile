@@ -4,6 +4,12 @@ group :development, :test do
   gem 'rspec'
   gem 'rspec-rails'
   gem 'jasmine'
+  gem 'spork-rails'
+  gem 'childprocess'
+end
+
+group :test do
+  gem 'factory_girl_rails'
 end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
