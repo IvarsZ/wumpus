@@ -5,7 +5,7 @@ Game = {
 
     // Init crafty and set background color.
     Crafty.init(544, 306);
-    Crafty.background("rgb(200, 250, 250)");
+    Crafty.background(Game.colors.background);
 
     // Simply start the 'Game' scene to get things going.
     Crafty.scene("Game");
@@ -30,11 +30,11 @@ Game = {
   },
 
   sideBarWidth: 160,
-  topBarHeight: 50
-}
-
-function sleep(delay)
-{
-    var start = new Date().getTime();
-    while (new Date().getTime() < start + delay);
+  topBarHeight: 50,
+  
+  colors: {
+    background: "rgb(20, 20, 20)",
+    sideBar: "rgb(50, 50, 50)",
+    topBar: "rgb(150, 150, 150)"
+  }
 }
