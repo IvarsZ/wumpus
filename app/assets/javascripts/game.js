@@ -34,7 +34,11 @@ Game = {
   
   colors: {
     background: "rgb(20, 20, 20)",
-    sideBar: "rgb(50, 50, 50)",
-    topBar: "rgb(150, 150, 150)"
+    sideBar: "rgb(60, 60, 60)",
+    topBar: "rgb(150, 150, 150)",
+    text: "rgb(256, 256, 256)"
   }
 }
+
+// CSS
+$text_css = { 'font-size': '24px', 'font-family': 'Arial', 'color': 'white', 'text-align': 'center' }

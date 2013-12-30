@@ -7,6 +7,9 @@ describe("Player movement", function() {
     Game.sideBarWidth = 160;
     Game.topBarHeight = 50;   
 
+    Game.params.numberOfRows = 8;
+    Game.params.numberOfColumns = 12;
+
     Game.start();
     Game.player.placeAt(1, 2);
 

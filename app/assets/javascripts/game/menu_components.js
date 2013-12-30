@@ -10,7 +10,8 @@ Crafty.c("Slider", {
     // A text label for it.
     var textLabel = Crafty.e("2D, DOM, Text")
       .attr({x: x, y: y, z: 1, w: w, h: h})
-      .text(text + ": " + value);
+      .text(text + ": " + value)
+      .css($text_css);
 
     if (this.has("Persist")) {
 
@@ -35,11 +36,18 @@ Crafty.c("Slider", {
     $(this.sliderHolder._element).mousedown(function (event) {
       event.stopPropagation();
     });
+
+    return this;
   },
 
   // Returns the value of the slider.
-  value: function() {
+  getValue: function() {
     return $(this.sliderHolder._element).slider("option", "value");
+  },
+
+  // Sets the value of the slider.
+  setValue: function(value) {
+    $(this.sliderHolder._element).slider("value", value);
   }
 });
 
@@ -49,26 +57,32 @@ Crafty.c("Button", {
   button: function(x, y, w, h, text, click) {
 
     // Crafty's entity to hold the button.
-    var buttonHolder = Crafty.e("2D, DOM, HTML")
+    this.buttonHolder = Crafty.e("2D, DOM, HTML")
       .replace("<button>" + text + "</button>")
       .attr({x: x, y: y, z: 1, w: w, h: h});
 
     if (this.has("Persist")) {
 
       // Add persistance
-      buttonHolder.addComponent("Persist");
+      this.buttonHolder.addComponent("Persist");
     }
 
     // Turn it into a jqueryui button.
-    $(buttonHolder._element.children[0])
+    $(this.buttonHolder._element.children[0])
       .button()
       .click(click)
       .width(w)
       .height(h);
 
     // Prevent clicking the button from also clicking on crafty elements beneath it.
-    $(buttonHolder._element.children[0]).mousedown(function (event) {
+    $(this.buttonHolder._element.children[0]).mousedown(function (event) {
       event.stopPropagation();
     });
+
+    return this;
+  },
+
+  click: function() {
+    this.buttonHolder._element.children[0].click();
   }
 });
