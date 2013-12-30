@@ -33,6 +33,9 @@ Scenes = {
     // Get new params.
     Game.params.numberOfRows = Game.rowsSlider.getValue();
     Game.params.numberOfColumns = Game.columnsSlider.getValue();
+    Game.params.numberOfPits = Game.pitsSlider.getValue();
+    Game.params.numberOfBats = Game.batsSlider.getValue();
+    Game.params.numberOfArrows = Game.arrowsSlider.getValue();
 
     // Create new game.
     Scenes.createGame();
@@ -78,7 +81,16 @@ Scenes = {
       .slider(sliderPadding, 0, Game.sideBarWidth - 2 * sliderPadding - 3, 5, "No. of rows", Game.params.numberOfRows, 8, 15);
 
     Game.columnsSlider = Crafty.e("Slider, Persist")
-      .slider(sliderPadding, sliderBarOffsetY, Game.sideBarWidth - 2 * sliderPadding - 3, 5, "No. of columns", Game.params.numberOfColumns, 5, 15);
+      .slider(sliderPadding, sliderBarOffsetY, Game.sideBarWidth - 2 * sliderPadding - 3, 5, "No. of columns", Game.params.numberOfColumns, 8, 15);
+
+    Game.pitsSlider = Crafty.e("Slider, Persist")
+      .slider(sliderPadding, 2 * sliderBarOffsetY, Game.sideBarWidth - 2 * sliderPadding - 3, 5, "No. of pits", Game.params.numberOfPits, 0, 16);
+
+    Game.batsSlider = Crafty.e("Slider, Persist")
+      .slider(sliderPadding, 3 * sliderBarOffsetY, Game.sideBarWidth - 2 * sliderPadding - 3, 5, "No. of bats", Game.params.numberOfBats, 0, 16);
+
+    Game.arrowsSlider = Crafty.e("Slider, Persist")
+      .slider(sliderPadding, 4 * sliderBarOffsetY, Game.sideBarWidth - 2 * sliderPadding - 3, 5, "No. of arrows", Game.params.numberOfArrows, 0, 16);
 
     // Buttons.
     var buttonPadding = 3;

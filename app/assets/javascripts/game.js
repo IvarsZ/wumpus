@@ -20,12 +20,18 @@ Game = {
 
     numberOfRows: 8,
     numberOfColumns: 12,
+    numberOfPits: 6,
+    numberOfBats: 4,
+    numberOfArrows: 2,
 
     toAjaxData: function() {
       return {
         "game" : {
           "number_of_rows" : this.numberOfRows,
-          "number_of_columns" : this.numberOfColumns
+          "number_of_columns" : this.numberOfColumns,
+          "number_of_pits" : this.numberOfPits,
+          "number_of_bats" : this.numberOfBats,
+          "number_of_arrows" : this.numberOfArrows
         }
       };
     }

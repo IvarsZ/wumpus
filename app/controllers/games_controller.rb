@@ -22,7 +22,10 @@ class GamesController < ApplicationController
     def game_params
       params.require(:game).permit(
         :number_of_rows,
-        :number_of_columns
+        :number_of_columns,
+        :number_of_pits,
+        :number_of_bats,
+        :number_of_arrows
       )
     end
 end
