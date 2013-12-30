@@ -1,11 +1,13 @@
 describe("Game", function() {
 
   beforeEach(function() {
-    Game.start();
-  });
 
-  afterEach(function() {
-    Game.stop();
+    Game.tile.width = 32;
+    Game.tile.height = 32;
+    Game.sideBarWidth = 160;
+    Game.topBarHeight = 50;    
+
+    Game.start();
   });
 
   it("has correct width and height", function() {

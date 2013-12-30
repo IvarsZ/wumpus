@@ -1,6 +1,6 @@
 describe("Grid component", function() {
 
-  var gridEntity = Crafty.e("Grid");
+  var gridEntity;
 
   beforeEach(function() {
 
@@ -8,8 +8,10 @@ describe("Grid component", function() {
     Game.tile.height = 32;
     Game.sideBarWidth = 160;
     Game.topBarHeight = 50;
-  });
 
+    Game.start();
+    gridEntity = Crafty.e("Grid");
+  });
 
   it("can be placed at row 0 and column 0", function() {
     gridEntity.placeAt(0, 0);
