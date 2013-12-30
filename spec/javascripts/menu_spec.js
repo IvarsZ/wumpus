@@ -5,7 +5,10 @@ describe("Menu", function() {
     Game.tile.width = 32;
     Game.tile.height = 32;
     Game.sideBarWidth = 160;
-    Game.topBarHeight = 50;    
+    Game.topBarHeight = 50;
+
+    Game.params.numberOfRows = 8;
+    Game.params.numberOfColumns = 12;   
 
     Game.start();
   });

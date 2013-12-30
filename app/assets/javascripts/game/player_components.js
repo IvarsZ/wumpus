@@ -44,6 +44,35 @@ Crafty.c("Actor", {
   },
 });
 
+// An InBounds listens for moved events and keeps the entity in the bounds of the grid
+// by assuming it's a torus and placing the entity on the opposite side.
+Crafty.c("InBounds", {
+  init: function() {
+    this.requires("Grid");
+    
+    this.bind("Moved", function() {
+
+      var row = this.getRow();
+      var column = this.getColumn();
+
+      if (column < 0) {
+        column = Game.params.numberOfColumns - 1;
+      }
+      else if (column >= Game.params.numberOfColumns) {
+        column = 0;
+      }
+      else if (row< 0) {
+        row = Game.params.numberOfRows - 1;
+      }
+      else if (row >= Game.params.numberOfRows) {
+        row = 0;
+      }
+
+      this.placeAt(row, column);
+    });
+  }
+});
+
 // A Slide listens for slide events and smoothly slides to another tile location.
 Crafty.c("Slide", {
   init: function() {
@@ -144,7 +173,7 @@ Crafty.c("PlayerMovement", {
 Crafty.c("Player", {
   init: function() { 
   
-    this.requires("Actor, Color, Slide, PlayerMovement")
+    this.requires("Actor, Color, Slide, PlayerMovement, InBounds")
       .color('rgb(20, 75, 40)');
   }
 });

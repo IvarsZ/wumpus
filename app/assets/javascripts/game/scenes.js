@@ -6,11 +6,11 @@ Crafty.scene("Game", function() {
   Crafty.init(width, height);
   Crafty.canvas.init();
 
-  Scenes.buildSideBar(height); // Take up the whole screen height wise.
-  Scenes.buildTopBar(width - Game.sideBarWidth); // Take up the whole screen width wise, except sidebar.
-
   Game.player = Crafty.e("Player")
     .placeAt(2, 3);
+
+  Scenes.buildSideBar(height); // Take up the whole screen height wise.
+  Scenes.buildTopBar(width - Game.sideBarWidth); // Take up the whole screen width wise, except sidebar.
 });
 
 Scenes = {
