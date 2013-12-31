@@ -122,7 +122,7 @@ Scenes = {
     // Notification icons.
     var iconPadding = 9;
     var iconOffsetX = 50;
-    Game.pitsIcon = Crafty.e("2D, Canvas, Color")
+    Game.pitsIcon = Crafty.e("2D, Canvas, Color, Persist")
       .color("rgb(120, 75, 40)")
       .attr({
         x: Game.sideBarWidth + iconPadding,
@@ -132,7 +132,7 @@ Scenes = {
       });
     Game.pitsIcon.visible = false;
 
-    Game.wumpusIcon = Crafty.e("2D, Canvas, Color")
+    Game.wumpusIcon = Crafty.e("2D, Canvas, Color, Persist")
       .color("rgb(120, 75, 40)")
       .attr({
         x: Game.sideBarWidth + iconPadding + iconOffsetX,
@@ -142,7 +142,7 @@ Scenes = {
       });
     Game.wumpusIcon.visible = false;
 
-    Game.treasureIcon = Crafty.e("2D, Canvas, Color")
+    Game.treasureIcon = Crafty.e("2D, Canvas, Color, Persist")
       .color("rgb(120, 75, 40)")
       .attr({
         x: Game.sideBarWidth + iconPadding + 2 * iconOffsetX,

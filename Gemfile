@@ -12,6 +12,11 @@ group :test do
   gem 'factory_girl_rails'
 end
 
+group :production do
+  gem 'pg'
+  gem 'rails_12factor'
+end
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.2'
 
