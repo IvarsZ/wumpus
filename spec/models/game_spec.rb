@@ -51,27 +51,27 @@ describe Game do
     before { @game.generate_cave }
 
     it "should have player" do
-      @game.cave.count("C").should be(1)
+      @game.cave.count(Game::CONTENTS[:player]).should be(1)
     end
 
     it "should have door" do
-      @game.cave.count("D").should be(1)
+      @game.cave.count(Game::CONTENTS[:door]).should be(1)
     end
 
     it "should have treasure" do
-      @game.cave.count("T").should be(1)
+      @game.cave.count(Game::CONTENTS[:treasure]).should be(1)
     end
 
     it "should have wumpus" do
-      @game.cave.count("W").should be(1)
+      @game.cave.count(Game::CONTENTS[:wumpus]).should be(1)
     end
 
     it "should have correct number of pits" do
-      @game.cave.count("P").should be(@game.number_of_pits)
+      @game.cave.count(Game::CONTENTS[:pit]).should be(@game.number_of_pits)
     end
 
     it "should have correct number of bats" do
-      @game.cave.count("B").should be(@game.number_of_bats)
+      @game.cave.count(Game::CONTENTS[:bat]).should be(@game.number_of_bats)
     end
   end
 end
