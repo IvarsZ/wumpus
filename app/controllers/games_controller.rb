@@ -8,12 +8,23 @@ class GamesController < ApplicationController
     @game = Game.new(game_params)
     if @game.save
       respond_to do |format|
-        format.json { render json: {ok: true, id: @game.id} }
+        format.json { render json: { id: @game.id } }
       end
     else
       respond_to do |format|
-          format.json { render json: {ok: false, error: "couldn't save"} }
+        format.json { render json: { errors: @game.errors.as_json }, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def make_move
+
+    move = Move.new(move_params)
+    if move_service = MakeMove.new(move).make_move
+      # TODO find surroundings.
+       format.json { head :ok }
+    else
+      format.json { render json: { errors: move_service.errors.as_json }, status: :unprocessable_entity }
     end
   end
 
@@ -27,5 +38,9 @@ class GamesController < ApplicationController
         :number_of_bats,
         :number_of_arrows
       )
+    end
+
+    def move_params
+      params.require(:move).permit(:row, :column)
     end
 end

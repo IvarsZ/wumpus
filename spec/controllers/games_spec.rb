@@ -13,9 +13,9 @@ describe GamesController do
 
   describe "creating a game with ajax" do
     
-    it "should respond with success" do
+    it "responds with success" do
       xhr :post, :create, game_params
-      expect(response).to be_success
+      assert_response :ok
     end
 
     it "should increment the Game count" do
@@ -32,9 +32,9 @@ describe GamesController do
 
     describe "with mising parameters" do
       
-      it "should respond with ok being false" do
+      it "should respond with error" do
         xhr :post, :create, game: { game: {} }
-        JSON.parse(response.body)["ok"].should be_false
+        assert_response :unprocessable_entity
       end
     end
   end
