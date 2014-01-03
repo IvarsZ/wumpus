@@ -23,7 +23,20 @@ class MakeMove
       return false
     end
 
-    self.game.move_player(self.move.row, self.move.column)
+    row = self.move.row
+    column = self.move.column
+
+    if row < 0
+      row = self.game.number_of_rows - 1
+    elsif row >= self.game.number_of_rows
+      row = 0
+    elsif column < 0
+      column = self.game.number_of_columns - 1
+    elsif column >= self.game.number_of_columns
+      column = 0
+    end
+
+    self.game.move_player(row, column)
 
     unless self.game.save
       self.errors = self.game.errors

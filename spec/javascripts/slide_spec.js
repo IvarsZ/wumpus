@@ -8,6 +8,7 @@ describe("Slide", function() {
     spyOn($, "ajax").and.callFake(function(options) {
       Game.id = 1;
       Crafty.scene('Game');
+      Game.sendingMove = false;
     });
 
     Game.tile.width = 32;
