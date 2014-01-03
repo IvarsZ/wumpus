@@ -69,6 +69,7 @@ Crafty.c("InBounds", {
       }
 
       this.placeAt(row, column);
+      this.movementDone = true;
     });
   }
 });
@@ -116,7 +117,7 @@ Crafty.c("Slide", {
         finishedSliding = false;
       }
         
-      if(!sliding) { 
+      if(!sliding) {
         return false;
       }
 
@@ -142,6 +143,8 @@ Crafty.c("PlayerMovement", {
 
   init: function() {
 
+      this.movementDone = true
+
       // Maps keys to movement direction.
       var keys = { 
         UP_ARROW:     {row: -1, column:  0},
@@ -160,12 +163,50 @@ Crafty.c("PlayerMovement", {
     }
 
     this.bind("KeyDown", function(e) {
-      if(keys[e.key]) {
+
+      if(keys[e.key] && !Game.sendingMove && this.movementDone) {
          
         var direction = keys[e.key];
-        this.trigger('Slide', direction);
+
+        this.movementDone = false;
+        this.trigger("SendMove", direction);
+        this.trigger("Slide", direction);
       }
     })
+  },
+  
+  directionToAjaxMove: function(direction) {
+    return {
+      "move" : {
+        "row" : direction.row + this.getRow(),
+        "column" : direction.column + this.getColumn(),
+        "game_id" : Game.id
+      }
+    };
+  }
+});
+
+Crafty.c("ActionSender", {
+  init: function() {
+
+    this.bind("SendMove", function(direction) {
+
+      Game.sendingMove = true
+
+      $.ajax({
+        url : Game.urls.sendMove,
+        type : "POST",
+        data : this.directionToAjaxMove(direction),
+        success : function(response) {
+          Game.sendingMove = false
+          Scenes.updateNotifications(response);
+        },
+        error: function(e) {
+          // TODO pretty output
+          alert(JSON.stringify(e.responseJSON.errors));
+        }
+      });
+    });
   }
 });
 
@@ -173,7 +214,7 @@ Crafty.c("PlayerMovement", {
 Crafty.c("Player", {
   init: function() { 
   
-    this.requires("Actor, Color, Slide, PlayerMovement, InBounds")
+    this.requires("Actor, Color, Slide, PlayerMovement, InBounds, ActionSender")
       .color('rgb(20, 75, 40)');
   }
 });

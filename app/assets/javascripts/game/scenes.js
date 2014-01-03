@@ -6,8 +6,9 @@ Crafty.scene("Game", function() {
   Crafty.init(width, height);
   Crafty.canvas.init();
 
-  Game.player = Crafty.e("Player")
-    .placeAt(2, 3);
+  if (Game.player === undefined) {
+    Game.player = Crafty.e("Player, Persist");
+  }
 
   // Create sidebar only once.
   if (Game.sideBar === undefined) {
@@ -47,24 +48,27 @@ Scenes = {
       url : Game.urls.createGame,
       type : "POST",
       data : Game.params.toAjaxData(),
-      success : function(data) {
-        if (data.ok) {
-          this.id = data.id;
-          Crafty.scene('Game');
-          Scenes.updateNotifications(data);
+      success : function(response) {
+
+        Game.id = response.id;
+        if (Game.player !== undefined) {
+          Game.player.visible = false; // hide while chaning scenes to undraw.
         }
-        else {
-          alert("Server error: ", data.error);
-        }
+        Crafty.scene('Game');
+        Game.player.placeAt(response.row, response.column);
+        Game.player.visible = true;
+        Scenes.updateNotifications(response.notifications);
       },
-      error: function() {
-        alert("Couldn't connect to server refresh page to try again");
+      error: function(e) {
+
+        // TODO pretty output
+        alert(JSON.stringify(e.responseJSON.errors));
       }
     });
   },
 
   updateNotifications: function(data) {
-    Game.pitsIcon.visible = data.nearby_pit;
+    Game.pitsIcon.visible = data.nearby_pits;
     Game.wumpusIcon.visible = data.nearby_wumpus;
     Game.treasureIcon.visible = data.nearby_treasure;
   },

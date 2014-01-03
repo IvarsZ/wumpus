@@ -54,7 +54,8 @@ Game = {
   },
 
   urls: {
-    createGame: "games/create"
+    createGame: "games/create",
+    sendMove:   "games/make_move"
   }
 }
 

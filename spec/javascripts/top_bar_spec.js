@@ -53,7 +53,7 @@ describe("Top Bar", function() {
 
         Game.id = 1;
         data = {
-          "nearby_pit" : true
+          "nearby_pits" : true
         }
 
         Crafty.scene('Game');          
@@ -160,7 +160,7 @@ describe("Top Bar", function() {
 
           Game.id = 1;
           data = {
-            "nearby_pit" : true
+            "nearby_pits" : true
           }
 
           Crafty.scene('Game');          

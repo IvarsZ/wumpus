@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe Game do
 
-  RSpec::Matchers define :have_nearby do |content|
-    match do |content|
-      @game.notifications["nearby_#{content}"] == true
+  RSpec::Matchers.define :notify do |notification|
+    match do |it|
+      it.get_notifications[notification] == true
     end
   end
   
@@ -88,21 +88,21 @@ describe Game do
     end
   end
 
-  describe "status"
+  describe "status" do
 
     before do
     
       @game = Game.new(
         number_of_rows: 6,
         number_of_columns: 6,
-        number_of_pits: 3,
+        number_of_pits: 2,
         number_of_bats: 1,
         number_of_arrows: 1
       )
       @game.stub(:generate_cave) do
         @game.cave = "......" \
                      ".W..P." \
-                     "......" \
+                     "P....." \
                      ".T..D." \
                      "......" \
                      ".B...."
@@ -110,28 +110,64 @@ describe Game do
       @game.save
     end
 
-    context "nothing around" do
+    context "with nothing around" do
 
       before do
         @game.player_row = 2
         @game.player_column = 2
       end
 
-      it { should_not have_nearby :wumpus }
-      it { should_not have_nearby :pit }
-      it { should_not have_nearby :treasure }
+      it { should_not notify :nearby_wumpus }
+      it { should_not notify :pit }
+      it { should_not notify :treasure }
     end
 
-    context "nearby only wumpus" do
+    context "with only nearby wumpus" do
 
       before do
         @game.player_row = 1
         @game.player_column = 2
       end
 
-      it { should have_nearby :wumpus }
-      it { should_not have_nearby :pit }
-      it { should_not have_nearby :treasure }
+      it { should notify :nearby_wumpus }
+      it { should_not notify :nearby_pits }
+      it { should_not notify :nearby_treasure }
+    end
+
+    context "with only nearby pit" do
+
+      before do
+        @game.player_row = 0
+        @game.player_column = 4
+      end
+
+      it { should_not notify :nearby_wumpus }
+      it { should notify :nearby_pits }
+      it { should_not notify :nearby_treasure }
+    end
+
+   context "with only nearby treasure" do
+
+      before do
+        @game.player_row = 3
+        @game.player_column = 2
+      end
+
+      it { should_not notify :nearby_wumpus }
+      it { should_not notify :nearby_pits }
+      it { should notify :nearby_treasure }
+    end
+
+   context "with nearby treasure, pit and wumpus" do
+
+      before do
+        @game.player_row = 2
+        @game.player_column = 1
+      end
+
+      it { should notify :nearby_wumpus }
+      it { should notify :nearby_pits }
+      it { should notify :nearby_treasure }
     end
   end
 end

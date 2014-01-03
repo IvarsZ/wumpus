@@ -21,7 +21,19 @@ class Game < ActiveRecord::Base
   def move_player(row, column)
     self.player_row = row
     self.player_column = column
-  end  
+  end
+  
+  def get_notifications
+
+    notifications = {}
+    adjacent_cells = get_adjacent_cells
+
+    notifications[:nearby_wumpus] = adjacent_cells.include?(CONTENTS[:wumpus])
+    notifications[:nearby_pits] = adjacent_cells.include?(CONTENTS[:pit])
+    notifications[:nearby_treasure] = adjacent_cells.include?(CONTENTS[:treasure])
+
+    notifications
+  end
 
   private
 
@@ -53,4 +65,30 @@ class Game < ActiveRecord::Base
     def pop_empty_cell
       @empty_cells.delete_at(rand(@empty_cells.length))
     end
+
+    def get_cell(row, column)
+      return self.cave[row * number_of_columns + column] 
+    end
+
+    def get_adjacent_cells
+
+      adjacentCellsOffset = [
+        {row: 0, column: -1},
+        {row: 0, column: 1},
+        {row: -1, column: 0},
+        {row: 1, column: 0}
+      ]
+
+      adjacent_cells = []
+
+      adjacentCellsOffset.each do |adjacentCellOffset|
+          
+        adjacentCellRow = self.player_row + adjacentCellOffset[:row]
+        adjacentCellColumn = self.player_column + adjacentCellOffset[:column]        
+
+        adjacent_cells.push(get_cell(adjacentCellRow, adjacentCellColumn))
+      end
+
+    adjacent_cells
+  end
 end

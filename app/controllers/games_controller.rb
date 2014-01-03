@@ -4,14 +4,12 @@ class GamesController < ApplicationController
   end
 
   def create
-    
-    @game = Game.new(game_params)
-    if @game.save
-      respond_to do |format|
-        format.json { render json: { id: @game.id } }
-      end
-    else
-      respond_to do |format|
+
+    respond_to do |format|
+      @game = Game.new(game_params)
+      if @game.save
+        format.json { render json: { id: @game.id, row: @game.player_row, column: @game.player_column, notifications: @game.get_notifications } }
+      else
         format.json { render json: { errors: @game.errors.as_json }, status: :unprocessable_entity }
       end
     end
@@ -19,12 +17,14 @@ class GamesController < ApplicationController
 
   def make_move
 
-    move = Move.new(move_params)
-    if move_service = MakeMove.new(move).make_move
-      # TODO find surroundings.
-       format.json { head :ok }
-    else
-      format.json { render json: { errors: move_service.errors.as_json }, status: :unprocessable_entity }
+    respond_to do |format|
+      move = Move.new(move_params)
+      move_service = MakeMove.new(move)
+      if move_service.make_move
+        format.json { render json: move_service.game.get_notifications.as_json }
+      else
+        format.json { render json: { errors: move_service.errors.as_json }, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -41,6 +41,6 @@ class GamesController < ApplicationController
     end
 
     def move_params
-      params.require(:move).permit(:row, :column)
+      params.require(:move).permit(:row, :column, :game_id)
     end
 end
