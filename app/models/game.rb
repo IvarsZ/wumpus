@@ -21,6 +21,8 @@ class Game < ActiveRecord::Base
   def move_player(row, column)
     self.player_row = row
     self.player_column = column
+
+    get_notifications
   end
   
   def get_notifications
@@ -30,7 +32,26 @@ class Game < ActiveRecord::Base
 
     notifications[:nearby_wumpus] = adjacent_cells.include?(CONTENTS[:wumpus])
     notifications[:nearby_pits] = adjacent_cells.include?(CONTENTS[:pit])
-    notifications[:nearby_treasure] = adjacent_cells.include?(CONTENTS[:treasure])
+
+    notifications[:nearby_treasure] = !self.treasure_found? && adjacent_cells.include?(CONTENTS[:treasure])
+    
+    player_cell = get_cell(self.player_row, self.player_column)
+
+    if (player_cell == CONTENTS[:wumpus])
+      notifications[:on_wumpus] = true
+    elsif (player_cell == CONTENTS[:pit])
+      notifications[:on_pit] = true
+    elsif (player_cell == CONTENTS[:treasure])
+      unless self.treasure_found?
+        notifications[:treasure_found] = true
+        self.treasure_found = true
+      end
+    elsif (player_cell == CONTENTS[:door])
+      notifications[:on_door] = true
+      if self.treasure_found
+        notifications[:game_won] = true
+      end
+    end
 
     notifications
   end

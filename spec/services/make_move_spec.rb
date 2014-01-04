@@ -15,8 +15,8 @@ describe MakeMove do
     )
     @game.stub(:generate_cave) do
       @game.cave = "...." \
-                   "...." \
-                   "...." \
+                   "..W." \
+                   "..P." \
                    "...."
       @game.player_row = player[:row]
       @game.player_column = player[:column]
@@ -84,5 +84,19 @@ describe MakeMove do
         @move_service.move.column.should eq params[:column]
       end   
     end
+  end
+
+  context "when player is on wumpus" do
+    let(:player) { { row: 1, column: 2 } }
+    let(:move) { Move.new(row: 1, column: 1, game_id: @game.id) }
+
+    it { should_not be_valid }
+  end
+
+  context "when player is on pit" do
+    let(:player) { { row: 2, column: 2 } }
+    let(:move) { Move.new(row: 2, column: 1, game_id: @game.id) }
+
+    it { should_not be_valid }
   end
 end

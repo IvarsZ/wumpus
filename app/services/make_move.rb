@@ -3,6 +3,7 @@ class MakeMove
   include ActiveModel::Naming
 
   validate :orhtogonal_one_cell_move?
+  validate :game_not_over?
 
   attr_accessor :move, :game, :errors
 
@@ -36,14 +37,14 @@ class MakeMove
       column = 0
     end
 
-    self.game.move_player(row, column)
+    result = self.game.move_player(row, column)
 
     unless self.game.save
       self.errors = self.game.errors
       return false
     end
 
-    self.move.save
+    result
   end
 
   private
@@ -51,6 +52,19 @@ class MakeMove
     def orhtogonal_one_cell_move?
       if (self.move.row - self.game.player_row).abs + (self.move.column - self.game.player_column).abs != 1
         errors.add :base, "The move to make isn't orthogonal one cell move"
+      end
+    end
+
+    def game_not_over?
+      notifications = self.game.get_notifications
+      if notifications[:on_pit] 
+        errors.add :base, "Game over: player is on pit"
+      end
+      if notifications[:on_wumpus] 
+        errors.add :base, "Game over: player is on wumpus"
+      end
+      if notifications[:game_won]
+         errors.add :base, "Game won: can't make any moves"
       end
     end
 end

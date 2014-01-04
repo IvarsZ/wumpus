@@ -25,6 +25,8 @@ Crafty.scene("Game", function() {
   else {
     Scenes.resizeTopBar(width - Game.sideBarWidth);
   }
+
+  Game.is_over = false;
 });
 
 Scenes = {
@@ -71,6 +73,27 @@ Scenes = {
     Game.pitsIcon.visible = data.nearby_pits;
     Game.wumpusIcon.visible = data.nearby_wumpus;
     Game.treasureIcon.visible = data.nearby_treasure;
+
+    if (data.on_wumpus) {
+      alert("Game over: wumpus ate you");
+      Game.is_over = true;
+    }
+    if (data.on_pit) {
+      alert("Game over: you fell into a dark pit");
+      Game.is_over = true;
+    }
+    if (data.treasure_found) {
+      alert("You found the treasure");
+    }
+    if (data.on_door) {
+      if (data.game_won) {
+        alert("Game won: you found the treasure and the door");
+        Game.is_over = true;
+      }
+      else {
+        alert("Found door");
+      }
+    }
   },
 
   buildSideBar: function(height) {

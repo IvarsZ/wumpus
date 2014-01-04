@@ -20,8 +20,8 @@ class GamesController < ApplicationController
     respond_to do |format|
       move = Move.new(move_params)
       move_service = MakeMove.new(move)
-      if move_service.make_move
-        format.json { render json: move_service.game.get_notifications.as_json }
+      if result = move_service.make_move
+        format.json { render json: result.as_json }
       else
         format.json { render json: { errors: move_service.errors.as_json }, status: :unprocessable_entity }
       end

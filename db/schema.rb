@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140103085955) do
+ActiveRecord::Schema.define(version: 20140104132735) do
 
   create_table "games", force: true do |t|
     t.integer  "number_of_rows"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20140103085955) do
     t.string   "cave"
     t.integer  "player_row"
     t.integer  "player_column"
+    t.boolean  "treasure_found",    default: false
   end
 
   create_table "moves", force: true do |t|

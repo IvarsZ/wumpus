@@ -164,7 +164,7 @@ Crafty.c("PlayerMovement", {
 
     this.bind("KeyDown", function(e) {
 
-      if(keys[e.key] && !Game.sendingMove && this.movementDone) {
+      if(keys[e.key] && !Game.sendingMove && this.movementDone && !Game.is_over) {
          
         var direction = keys[e.key];
 

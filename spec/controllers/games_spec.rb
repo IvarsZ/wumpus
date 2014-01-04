@@ -30,6 +30,11 @@ describe GamesController do
       JSON.parse(response.body)["id"].should be 1
     end
 
+    it "should respond with notifications" do
+      xhr :post, :create, game_params
+      response.body.should include Game.last.get_notifications.to_json.to_s
+    end
+
     context "with mising parameters" do
       
       it "should respond with error" do
