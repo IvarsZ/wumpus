@@ -16,7 +16,7 @@ describe MakeMove do
     @game.stub(:generate_cave) do
       @game.cave = "...." \
                    "..W." \
-                   "..P." \
+                   ".DP." \
                    "...."
       @game.player_row = player[:row]
       @game.player_column = player[:column]
@@ -96,6 +96,18 @@ describe MakeMove do
   context "when player is on pit" do
     let(:player) { { row: 2, column: 2 } }
     let(:move) { Move.new(row: 2, column: 1, game_id: @game.id) }
+
+    it { should_not be_valid }
+  end
+
+  context "when player has found the treasure and the door" do
+    let(:player) { { row: 2, column: 1 } }
+    let(:move) { Move.new(row: 2, column: 1, game_id: @game.id) }
+  
+    before do
+      @game.treasure_found = true
+      MakeMove.new(Move.new(row: 2, column:2)).make_move
+    end
 
     it { should_not be_valid }
   end

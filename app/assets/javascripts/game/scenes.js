@@ -4,11 +4,6 @@ Crafty.scene("Game", function() {
   var height = Game.tile.height * Game.params.numberOfRows + Game.topBarHeight;
 
   Crafty.init(width, height);
-  Crafty.canvas.init();
-
-  if (Game.player === undefined) {
-    Game.player = Crafty.e("Player, Persist");
-  }
 
   // Create sidebar only once.
   if (Game.sideBar === undefined) {
@@ -26,7 +21,9 @@ Crafty.scene("Game", function() {
     Scenes.resizeTopBar(width - Game.sideBarWidth);
   }
 
+  Game.treasureFound = false;
   Game.is_over = false;
+  delete Scenes.textLabel;
 });
 
 Scenes = {
@@ -40,7 +37,7 @@ Scenes = {
     Game.params.numberOfBats = Game.batsSlider.getValue();
     Game.params.numberOfArrows = Game.arrowsSlider.getValue();
 
-    // Create new game.
+    // Create new game and load it.
     Scenes.createGame();
   },
 
@@ -51,14 +48,13 @@ Scenes = {
       type : "POST",
       data : Game.params.toAjaxData(),
       success : function(response) {
-
+                
+        Crafty.scene("Game");
         Game.id = response.id;
-        if (Game.player !== undefined) {
-          Game.player.visible = false; // hide while chaning scenes to undraw.
+        if (Game.player === undefined) {
+          Game.player = Crafty.e("Player, Persist");
         }
-        Crafty.scene('Game');
         Game.player.placeAt(response.row, response.column);
-        Game.player.visible = true;
         Scenes.updateNotifications(response.notifications);
       },
       error: function(e) {
@@ -72,38 +68,68 @@ Scenes = {
   updateNotifications: function(data) {
     Game.pitsIcon.visible = data.nearby_pits;
     Game.wumpusIcon.visible = data.nearby_wumpus;
-    Game.treasureIcon.visible = data.nearby_treasure;
+    Game.treasureIcon.visible = data.nearby_treasure || Game.treasureFound;
 
     if (data.on_wumpus) {
-      alert("Game over: wumpus ate you");
+      Scenes.showText("Game over: wumpus ate you");
       Game.is_over = true;
     }
     if (data.on_pit) {
-      alert("Game over: you fell into a dark pit");
+      Scenes.showText("Game over: you fell into a dark pit");
       Game.is_over = true;
     }
     if (data.treasure_found) {
-      alert("You found the treasure");
+      // TODO Scenes.showText("You found the treasure");
+      Game.treasureFound = true;
+      Game.treasureIcon.visible = true;
+      Game.treasureIcon.visible;
+      Game.treasureIcon.color("rgb(24, 67, 100)");
     }
     if (data.on_door) {
       if (data.game_won) {
-        alert("Game won: you found the treasure and the door");
+        Scenes.showText("Game won: you found the treasure and the door");
         Game.is_over = true;
       }
       else {
-        alert("Found door");
+        // TODO Scenes.showText("Found door");
+        this.drawDoor(Game.player.getRow(), Game.player.getColumn());
       }
     }
   },
 
+  showText: function(text) {
+
+    if (this.textLabel === undefined) {
+      this.textLabel = Crafty.e("2D, DOM, Text")
+        .attr({
+          x: Game.sideBarWidth + 5,
+          y: Game.topBarHeight - 18,
+          z: 1,
+          h: 18,
+          w: Game.tile.width * Game.params.numberOfColumns - 5})
+        .textColor("#FFFFFF")
+        .textFont({ family: "Arial", size: "15px"});
+    }
+    
+    this.textLabel.text(text);
+  },
+
+  drawDoor: function(row, column) {
+    var door = Crafty.e("Actor, Color")
+      .placeAt(row, column)
+      .color("rgb(50, 100, 200)");
+    door.z = 100;
+  },
+
   buildSideBar: function(height) {
     
-    Game.sideBar = Crafty.e("2D, Canvas, Color, Persist")
+    Game.sideBar = Crafty.e("2D, DOM, Color, Persist")
       .attr({
         x: 0,
         y: 0,
         w: Game.sideBarWidth,
-        h: height 
+        h: height,
+        z: Game.order.menuElements
       })
       .color(Game.colors.sideBar);
 
@@ -137,45 +163,49 @@ Scenes = {
 
   buildTopBar: function(width) {
 
-    Game.topBar = Crafty.e("2D, Canvas, Color, Persist")
+    Game.topBar = Crafty.e("2D, DOM, Color, Persist")
       .attr({
         x: Game.sideBarWidth,
         y: 0,
         w: width,
-        h: Game.topBarHeight
+        h: Game.topBarHeight,
+        z: Game.order.menuElements
       })
       .color(Game.colors.topBar);
 
     // Notification icons.
-    var iconPadding = 9;
+    var iconPadding = 5;
     var iconOffsetX = 50;
-    Game.pitsIcon = Crafty.e("2D, Canvas, Color, Persist")
+    Game.pitsIcon = Crafty.e("2D, DOM, Color, Persist")
       .color("rgb(120, 75, 40)")
       .attr({
         x: Game.sideBarWidth + iconPadding,
         y: iconPadding,
         w: Game.tile.width,
-        h: Game.tile.height
+        h: Game.tile.height,
+        z: Game.order.menuElements
       });
     Game.pitsIcon.visible = false;
 
-    Game.wumpusIcon = Crafty.e("2D, Canvas, Color, Persist")
+    Game.wumpusIcon = Crafty.e("2D, DOM, Color, Persist")
       .color("rgb(120, 75, 40)")
       .attr({
         x: Game.sideBarWidth + iconPadding + iconOffsetX,
         y: iconPadding,
         w: Game.tile.width,
-        h: Game.tile.height
+        h: Game.tile.height,
+        z: Game.order.menuElements
       });
     Game.wumpusIcon.visible = false;
 
-    Game.treasureIcon = Crafty.e("2D, Canvas, Color, Persist")
+    Game.treasureIcon = Crafty.e("2D, DOM, Color, Persist")
       .color("rgb(120, 75, 40)")
       .attr({
         x: Game.sideBarWidth + iconPadding + 2 * iconOffsetX,
         y: iconPadding,
         w: Game.tile.width,
-        h: Game.tile.height
+        h: Game.tile.height,
+        z: Game.order.menuElements
       });
     Game.treasureIcon.visible = false;
   },

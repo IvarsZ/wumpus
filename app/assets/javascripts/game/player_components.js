@@ -37,10 +37,10 @@ Crafty.c("Grid", {
   }
 });
 
-// An Actor is drawn in 2D on canvas via the row, column grid.
+// An Actor is drawn in 2D on DOM via the row, column grid.
 Crafty.c("Actor", {
   init: function() {
-    this.requires("2D, Canvas, Grid");
+    this.requires("2D, DOM, Grid");
   },
 });
 
@@ -215,6 +215,7 @@ Crafty.c("Player", {
   init: function() { 
   
     this.requires("Actor, Color, Slide, PlayerMovement, InBounds, ActionSender")
-      .color('rgb(20, 75, 40)');
+      .color('rgb(20, 75, 40)')
+      .attr({z: Game.order.player});
   }
 });

@@ -44,7 +44,7 @@ Game = {
   },
 
   sideBarWidth: 160,
-  topBarHeight: 50,
+  topBarHeight: 55,
   
   colors: {
     background: "rgb(20, 20, 20)",
@@ -56,8 +56,10 @@ Game = {
   urls: {
     createGame: "games/create",
     sendMove:   "games/make_move"
+  },
+
+  order: {
+    menuElements: 2,
+    player: 1
   }
 }
-
-// CSS
-$text_css = { 'font-size': '24px', 'font-family': 'Arial', 'color': 'white', 'text-align': 'center' }

@@ -5,13 +5,13 @@ Crafty.c("Slider", {
 
     // Crafty's entity to hold the slider.
     this.sliderHolder = Crafty.e("2D, DOM")
-      .attr({x: x, y: y + 15, z: 1, w: w, h: h});
+      .attr({x: x, y: y + 15, z: 1, w: w, h: h, z: Game.order.menuElements});
 
     // A text label for it.
     var textLabel = Crafty.e("2D, DOM, Text")
-      .attr({x: x, y: y, z: 1, w: w, h: h})
+      .attr({x: x, y: y, z: Game.order.menuElements, w: w, h: h})
       .text(text + ": " + value)
-      .css($text_css);
+      .css({"color": "white", "text-align": "center"});
 
     if (this.has("Persist")) {
 
@@ -59,7 +59,7 @@ Crafty.c("Button", {
     // Crafty's entity to hold the button.
     this.buttonHolder = Crafty.e("2D, DOM, HTML")
       .replace("<button>" + text + "</button>")
-      .attr({x: x, y: y, z: 1, w: w, h: h});
+      .attr({x: x, y: y, z: 1, w: w, h: h, z: Game.order.menuElements});
 
     if (this.has("Persist")) {
 
