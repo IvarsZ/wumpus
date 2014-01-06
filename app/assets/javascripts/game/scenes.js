@@ -254,9 +254,9 @@ Crafty.scene('Loading', function(){
       spr_bat:          [2, 2]
     });
 
-    // Define the PC's sprite to be the first sprite in the third row of the animation sprite map.
+    // Define the PC's sprite to be the second sprite in the third row of the animation sprite map.
     Crafty.sprite(32, 'assets/adventurer.png', {
-      spr_player: [0, 2],
+      spr_player: [1, 2]
     }, 0, 0);
 
     // Now that our sprites are ready to draw start the game.

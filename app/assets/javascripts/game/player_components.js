@@ -33,7 +33,7 @@ Crafty.c("InBounds", {
 Crafty.c("Slide", {
   init: function() {
 
-    this.requires('Grid');
+    this.requires("Grid");
 
     var stepFrames = 6; // Change to adjust speed of sliding
 
@@ -187,7 +187,31 @@ Crafty.c("Receiver", {
 Crafty.c("Player", {
   init: function() { 
   
-    this.requires("Actor, Slide, PlayerMovement, InBounds, Sender, spr_player, Receiver")
-      .attr({z: Game.order.player});
+    this.requires("Actor, Slide, PlayerMovement, InBounds, Sender, spr_player, SpriteAnimation, Receiver")
+      .attr({z: Game.order.player})
+      .animate("PlayerMovingUp",    0, 0, 2)
+      .animate("PlayerMovingRight", 0, 1, 2)
+      .animate("PlayerMovingDown",  0, 2, 2)
+      .animate("PlayerMovingLeft",  0, 3, 2); 
+
+    // Watch for a change of direction and switch animations accordingly
+    var frames_count = 6;
+    this.bind("Slide", function(direction) {
+      if (direction.column == 1) {
+        this.animate("PlayerMovingRight", frames_count);
+      }
+      else if (direction.column == -1) {
+        this.animate("PlayerMovingLeft", frames_count);
+      }
+      else if (direction.row == 1) {
+        this.animate("PlayerMovingDown", frames_count);
+      }
+      else if (direction.row == -1) {
+        this.animate("PlayerMovingUp", frames_count);
+      }
+      else {
+        this.stop();
+      }
+    });
   }
 });
