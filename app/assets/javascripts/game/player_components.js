@@ -1,49 +1,3 @@
-Grid = {
-
-  rowToY: function(row) {
-    return row * Game.tile.height + Game.topBarHeight;
-  },
-
-  columnToX: function(column) {
-    return column * Game.tile.width + Game.sideBarWidth;
-  }
-}
-
-// A Grid allows an element to be located on a grid of tiles.
-Crafty.c("Grid", {
-
-  init: function() {
-    this.attr({
-      w: Game.tile.width,
-      h: Game.tile.height
-    })
-  },
-
-  getRow: function() {
-    return (this.y - Game.topBarHeight)/Game.tile.height;
-  },
-
-  getColumn: function() {
-    return (this.x - Game.sideBarWidth)/Game.tile.width;
-  },
-
-  // Place this entity at the given row and column on the grid.
-  placeAt: function(row, column) {
-
-    this.x = Grid.columnToX(column);
-    this.y = Grid.rowToY(row);
-
-    return this; // Allow method chaining.
-  }
-});
-
-// An Actor is drawn in 2D on DOM via the row, column grid.
-Crafty.c("Actor", {
-  init: function() {
-    this.requires("2D, DOM, Grid");
-  },
-});
-
 // An InBounds listens for moved events and keeps the entity in the bounds of the grid
 // by assuming it's a torus and placing the entity on the opposite side.
 Crafty.c("InBounds", {
@@ -80,7 +34,7 @@ Crafty.c("Slide", {
 
     this.requires('Grid');
 
-    var stepFrames = 5; // Change to adjust speed of sliding.
+    var stepFrames = 6; // Change to adjust speed of sliding
 
     var velocityX = 0;
     var velocityY = 0;
@@ -214,8 +168,7 @@ Crafty.c("ActionSender", {
 Crafty.c("Player", {
   init: function() { 
   
-    this.requires("Actor, Color, Slide, PlayerMovement, InBounds, ActionSender")
-      .color('rgb(20, 75, 40)')
+    this.requires("Actor, Slide, PlayerMovement, InBounds, ActionSender, spr_player")
       .attr({z: Game.order.player});
   }
 });

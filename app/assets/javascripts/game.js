@@ -7,7 +7,7 @@ Game = {
     Crafty.init(544, 306);
     Crafty.background(Game.colors.background);
 
-    Scenes.createGame();
+    Crafty.scene('Loading');
   },
 
   // Stop and clear the game.
@@ -49,7 +49,7 @@ Game = {
   colors: {
     background: "rgb(20, 20, 20)",
     sideBar: "rgb(60, 60, 60)",
-    topBar: "rgb(150, 150, 150)",
+    topBar: "rgb(40, 40, 40)",
     text: "rgb(256, 256, 256)"
   },
 
@@ -60,6 +60,7 @@ Game = {
 
   order: {
     menuElements: 2,
-    player: 1
+    player: 1,
+    door: 2
   }
 }

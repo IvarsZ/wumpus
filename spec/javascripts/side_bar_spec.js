@@ -22,7 +22,7 @@ describe("Side Bar", function() {
     // Reset sidebar.
     Game.sideBar = undefined;
   
-    Game.start();
+    Scenes.createGame();
   });
 
   it("has correct width and height", function() {

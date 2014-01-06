@@ -3,9 +3,11 @@ describe("Game", function() {
   beforeEach(function() {
 
     // Mock ajax requests to server to start game.
-    spyOn($, "ajax").and.callFake(function(options) {
-      Game.id = 1;
+    spyOn($, "ajax").and.callFake(function(options) {     
       Crafty.scene('Game');
+      Game.id = 1;
+      Game.player = Crafty.e("Player");
+      Game.player.placeAt(1, 1);
     });
 
     Game.tile.width = 32;
@@ -14,9 +16,9 @@ describe("Game", function() {
     Game.topBarHeight = 50;
 
     Game.params.numberOfRows = 8;
-    Game.params.numberOfColumns = 12;  
+    Game.params.numberOfColumns = 12;
 
-    Game.start();
+    Scenes.createGame();
   });
 
   it("has correct width and height", function() {

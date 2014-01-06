@@ -5,8 +5,6 @@ describe("Player movement", function() {
     // Mock ajax requests to server to start game.
     spyOn($, "ajax").and.callFake(function(options) {
       Game.id = 1;
-      Crafty.scene('Game');
-      Game.sendingMove = false;
     });
 
     Game.tile.width = 32;
@@ -17,8 +15,11 @@ describe("Player movement", function() {
     Game.params.numberOfRows = 8;
     Game.params.numberOfColumns = 12;
 
-    Game.start();
+    Scenes.createGame();
+    Crafty.scene('Game');
+    Game.player = Crafty.e("Player");
     Game.player.placeAt(1, 2);
+    Game.sendingMove = false;
 
     done();
   });

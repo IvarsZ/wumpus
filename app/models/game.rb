@@ -104,10 +104,19 @@ class Game < ActiveRecord::Base
 
       adjacentCellsOffset.each do |adjacentCellOffset|
           
-        adjacentCellRow = self.player_row + adjacentCellOffset[:row]
-        adjacentCellColumn = self.player_column + adjacentCellOffset[:column]        
+        adjacentRow = self.player_row + adjacentCellOffset[:row]
+        adjacentColumn = self.player_column + adjacentCellOffset[:column]
+        if adjacentRow < 0
+          adjacentRow = self.number_of_rows - 1
+        elsif adjacentRow >= self.number_of_rows
+          adjacentRow = 0
+        elsif adjacentColumn < 0
+          adjacentColumn = self.number_of_columns - 1
+        elsif adjacentColumn >= self.number_of_columns
+          adjacentColumn = 0
+        end    
 
-        adjacent_cells.push(get_cell(adjacentCellRow, adjacentCellColumn))
+        adjacent_cells.push(get_cell(adjacentRow, adjacentColumn))
       end
 
     adjacent_cells

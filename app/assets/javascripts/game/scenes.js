@@ -5,12 +5,19 @@ Crafty.scene("Game", function() {
 
   Crafty.init(width, height);
 
+  // Resize canvas.
+  $(Crafty.canvas._canvas).attr({width: width});
+  $(Crafty.canvas._canvas).attr({height: height});
+
   // Create sidebar only once.
   if (Game.sideBar === undefined) {
     Scenes.buildSideBar(height); // Take up the whole screen height wise.
   }
   else {
     Scenes.resizeSideBar(height);
+
+    // HACK - Make the persist entities from previous scenes (menu elements) to be on top.
+    $(Crafty.stage.elem).children().last().css({"z-index": "9"});
   }
 
   // Create topBar only once.
@@ -23,7 +30,13 @@ Crafty.scene("Game", function() {
 
   Game.treasureFound = false;
   Game.is_over = false;
+  Game.treasureIcon.close();
   delete Scenes.textLabel;
+
+  Game.is_visited = new Array(Game.params.numberOfRows);
+  for (var i = 0; i < Game.params.numberOfRows; i++) {
+    Game.is_visited[i] = new Array(Game.params.numberOfColumns);
+  }
 });
 
 Scenes = {
@@ -51,9 +64,7 @@ Scenes = {
                 
         Crafty.scene("Game");
         Game.id = response.id;
-        if (Game.player === undefined) {
-          Game.player = Crafty.e("Player, Persist");
-        }
+        Game.player = Crafty.e("Player");
         Game.player.placeAt(response.row, response.column);
         Scenes.updateNotifications(response.notifications);
       },
@@ -83,17 +94,19 @@ Scenes = {
       Game.treasureFound = true;
       Game.treasureIcon.visible = true;
       Game.treasureIcon.visible;
-      Game.treasureIcon.color("rgb(24, 67, 100)");
+      Game.treasureIcon.open();
     }
     if (data.on_door) {
       if (data.game_won) {
         Scenes.showText("Game won: you found the treasure and the door");
         Game.is_over = true;
       }
-      else {
-        // TODO Scenes.showText("Found door");
-        this.drawDoor(Game.player.getRow(), Game.player.getColumn());
-      }
+      this.drawDoor(Game.player.getRow(), Game.player.getColumn());
+    }
+
+    if (!Game.is_visited[Game.player.getRow()][Game.player.getColumn()]) {
+      Game.is_visited[Game.player.getRow()][Game.player.getColumn()] = true;
+      Crafty.e("Tile").placeAt(Game.player.getRow(), Game.player.getColumn());
     }
   },
 
@@ -104,7 +117,7 @@ Scenes = {
         .attr({
           x: Game.sideBarWidth + 5,
           y: Game.topBarHeight - 18,
-          z: 1,
+          z: Game.order.menuElements,
           h: 18,
           w: Game.tile.width * Game.params.numberOfColumns - 5})
         .textColor("#FFFFFF")
@@ -115,10 +128,9 @@ Scenes = {
   },
 
   drawDoor: function(row, column) {
-    var door = Crafty.e("Actor, Color")
+    var door = Crafty.e("Door")
       .placeAt(row, column)
-      .color("rgb(50, 100, 200)");
-    door.z = 100;
+      .attr({z: Game.order.door});
   },
 
   buildSideBar: function(height) {
@@ -176,35 +188,26 @@ Scenes = {
     // Notification icons.
     var iconPadding = 5;
     var iconOffsetX = 50;
-    Game.pitsIcon = Crafty.e("2D, DOM, Color, Persist")
-      .color("rgb(120, 75, 40)")
+    Game.pitsIcon = Crafty.e("PitIcon, Persist")
       .attr({
         x: Game.sideBarWidth + iconPadding,
         y: iconPadding,
-        w: Game.tile.width,
-        h: Game.tile.height,
         z: Game.order.menuElements
       });
     Game.pitsIcon.visible = false;
 
-    Game.wumpusIcon = Crafty.e("2D, DOM, Color, Persist")
-      .color("rgb(120, 75, 40)")
+    Game.wumpusIcon = Crafty.e("WumpusIcon, Persist")
       .attr({
         x: Game.sideBarWidth + iconPadding + iconOffsetX,
         y: iconPadding,
-        w: Game.tile.width,
-        h: Game.tile.height,
         z: Game.order.menuElements
       });
     Game.wumpusIcon.visible = false;
 
-    Game.treasureIcon = Crafty.e("2D, DOM, Color, Persist")
-      .color("rgb(120, 75, 40)")
+    Game.treasureIcon = Crafty.e("ChestIcon, Persist")
       .attr({
         x: Game.sideBarWidth + iconPadding + 2 * iconOffsetX,
         y: iconPadding,
-        w: Game.tile.width,
-        h: Game.tile.height,
         z: Game.order.menuElements
       });
     Game.treasureIcon.visible = false;
@@ -214,3 +217,35 @@ Scenes = {
     Game.topBar.w = width;
   }
 }
+
+// Loading scene that loads binary assets such as images and audio files.
+Crafty.scene('Loading', function(){
+
+  // Load our image and audio assets.
+  Crafty.load(['assets/32x32_tiles.gif',
+               'assets/adventurer.png'
+               ], function() {
+    // Once the assets are loaded...
+
+    // Define the individual tile sprites.
+    Crafty.sprite(32, 'assets/32x32_tiles.gif', {
+      spr_tile_1:       [0, 0],
+      spr_tile_2:       [1, 0],
+      spr_tile_3:       [2, 0],
+      spr_door:         [0, 1],
+      spr_open_chest:   [1, 1],
+      spr_closed_chest: [2, 1],
+      spr_pit:          [0, 2],
+      spr_wumpus:       [1, 2],
+      spr_bat:          [2, 2]
+    });
+
+    // Define the PC's sprite to be the first sprite in the third row of the animation sprite map.
+    Crafty.sprite(32, 'assets/adventurer.png', {
+      spr_player: [0, 2],
+    }, 0, 0);
+
+    // Now that our sprites are ready to draw start the game.
+    Scenes.createGame();
+  })
+});

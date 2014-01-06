@@ -19,7 +19,7 @@ describe("Top Bar", function() {
     Game.params.numberOfBats = 4;
     Game.params.numberOfArrrows = 2;
 
-    Game.start();
+    Scenes.createGame();
   });
 
   it("has correct width and height", function() {
@@ -60,7 +60,7 @@ describe("Top Bar", function() {
         Scenes.updateNotifications(data);
       });
 
-      Game.start();
+      Scenes.createGame();
     });
     
     it("makes pit icon visible", function() {
@@ -84,7 +84,7 @@ describe("Top Bar", function() {
         Scenes.updateNotifications(data);
       });
 
-      Game.start();
+      Scenes.createGame();
     });
     
     it("makes wumpus icon visible", function() {
@@ -108,7 +108,7 @@ describe("Top Bar", function() {
         Scenes.updateNotifications(data);
       });
 
-      Game.start();
+      Scenes.createGame();
     });
     
     it("makes treasure icon visible", function() {
@@ -167,7 +167,7 @@ describe("Top Bar", function() {
           Scenes.updateNotifications(data);
         });
 
-        Game.start();
+        Scenes.createGame();
       });
       
       it("makes pit icon visible", function() {
@@ -191,7 +191,7 @@ describe("Top Bar", function() {
           Scenes.updateNotifications(data);
         });
 
-        Game.start();
+        Scenes.createGame();
       });
       
       it("makes wumpus icon visible", function() {
@@ -215,7 +215,7 @@ describe("Top Bar", function() {
           Scenes.updateNotifications(data);
         });
 
-        Game.start();
+        Scenes.createGame();
       });
       
       it("makes treasure icon visible", function() {
