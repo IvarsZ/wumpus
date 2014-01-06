@@ -68,9 +68,10 @@ Crafty.c("Door", {
   },
 });
 
-Crafty.c("BatIcon", {
+Crafty.c("Bat", {
   init: function() {
-    this.requires("Icon, spr_bat");
+    this.requires("Actor, spr_bat")
+      .attr({z: 100});
   },
 });
 

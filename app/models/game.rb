@@ -22,7 +22,13 @@ class Game < ActiveRecord::Base
     self.player_row = row
     self.player_column = column
 
-    get_notifications
+    bat_notifications = {}
+    if get_cell(self.player_row, self.player_column) == CONTENTS[:bat]
+      teleport_by_bat
+      bat_notifications[:by_bat] = {row: self.player_row, column: self.player_column }
+    end
+    
+    get_notifications.merge(bat_notifications)
   end
   
   def get_notifications
@@ -58,9 +64,25 @@ class Game < ActiveRecord::Base
 
   private
 
+    def teleport_by_bat
+
+      no_bat_cells = []
+      (0...self.number_of_rows).each do |row|
+        (0...self.number_of_columns).each do |column|
+          if get_cell(row, column) != CONTENTS[:bat]
+            no_bat_cells.push({row: row, column: column})  
+          end        
+        end
+      end
+
+      cell = no_bat_cells.sample
+      self.player_row = cell[:row]
+      self.player_column = cell[:column]
+    end
+
     def generate_cave
 
-      number_of_cells = number_of_rows * number_of_columns
+      number_of_cells = self.number_of_rows * self.number_of_columns
       self.cave = CONTENTS[:empty] * number_of_cells
 
       @empty_cells = (0...number_of_cells).to_a

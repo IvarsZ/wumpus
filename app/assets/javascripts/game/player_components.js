@@ -24,6 +24,7 @@ Crafty.c("InBounds", {
 
       this.placeAt(row, column);
       this.movementDone = true;
+      this.trigger("Update");
     });
   }
 });
@@ -140,8 +141,10 @@ Crafty.c("PlayerMovement", {
   }
 });
 
-Crafty.c("ActionSender", {
+Crafty.c("Sender", {
   init: function() {
+
+    var that = this;
 
     this.bind("SendMove", function(direction) {
 
@@ -152,8 +155,8 @@ Crafty.c("ActionSender", {
         type : "POST",
         data : this.directionToAjaxMove(direction),
         success : function(response) {
-          Game.sendingMove = false
-          Scenes.updateNotifications(response);
+          Game.sendingMove = false;
+          that.trigger("Receive", response);
         },
         error: function(e) {
           // TODO pretty output
@@ -164,11 +167,27 @@ Crafty.c("ActionSender", {
   }
 });
 
+Crafty.c("Receiver", {
+  init: function() {
+    this.bind("Receive", function(response) {
+      // Update only after movement is done.
+      var updateNotifications = function() {
+        Scenes.updateNotifications(response);
+        this.unbind("Update", updateNotifications);
+      }
+      this.bind("Update", updateNotifications);
+      if (this.movementDone) {
+        this.trigger("Update");
+      }
+    });
+  }
+});
+
 // The player-controlled character.
 Crafty.c("Player", {
   init: function() { 
   
-    this.requires("Actor, Slide, PlayerMovement, InBounds, ActionSender, spr_player")
+    this.requires("Actor, Slide, PlayerMovement, InBounds, Sender, spr_player, Receiver")
       .attr({z: Game.order.player});
   }
 });

@@ -108,6 +108,20 @@ Scenes = {
       Game.is_visited[Game.player.getRow()][Game.player.getColumn()] = true;
       Crafty.e("Tile").placeAt(Game.player.getRow(), Game.player.getColumn());
     }
+
+    if (data.by_bat) {
+
+      Crafty.e("Bat").placeAt(Game.player.getRow(), Game.player.getColumn());
+
+      Game.player.placeAt(data.by_bat.row, data.by_bat.column);
+    
+      if (!Game.is_visited[Game.player.getRow()][Game.player.getColumn()]) {
+        Game.is_visited[Game.player.getRow()][Game.player.getColumn()] = true;
+        Crafty.e("Tile").placeAt(Game.player.getRow(), Game.player.getColumn());
+      }
+
+      Game.player.unbind("BatTeleport");
+    }
   },
 
   showText: function(text) {

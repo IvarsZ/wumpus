@@ -226,5 +226,23 @@ describe Game do
         it { should notify :game_won }
       end
     end
+
+    context "on bat" do
+      let(:player) { { row: 5, column: 0 } }
+      let(:move_to) { { row: 5, column: 1 } }
+
+      it "teleports player to another cell" do
+        # TODO better test
+        (@game.player_row != move_to[:row] || @game.player_column != move_to[:column]).should be_true
+      end
+
+      it "teleports player to another cell without a bat" do
+        @game.send(:get_cell, @game.player_row, @game.player_column).should_not be Game::CONTENTS[:bat]
+      end
+
+      it {should notify :by_bat }
+
+      its([:by_bat]) { should include(:row, :column) }
+    end
   end
 end
