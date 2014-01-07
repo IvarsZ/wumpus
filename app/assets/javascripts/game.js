@@ -55,7 +55,8 @@ Game = {
 
   urls: {
     createGame: "games/create",
-    sendMove:   "games/make_move"
+    sendMove:   "games/make_move",
+    sendShot:   "games/make_shot"
   },
 
   order: {

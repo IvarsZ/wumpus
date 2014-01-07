@@ -66,6 +66,7 @@ Scenes = {
         Game.id = response.id;
         Game.player = Crafty.e("Player");
         Game.player.placeAt(response.row, response.column);
+        Game.player.numberOfArrows = Game.params.numberOfArrows;
         Scenes.updateNotifications(response.notifications);
       },
       error: function(e) {
@@ -86,7 +87,7 @@ Scenes = {
       Game.is_over = true;
     }
     if (data.on_pit) {
-      Scenes.showText("Game over: you fell into a dark pit");
+      Scenes.showText("Game over: you fell into a lava pit");
       Game.is_over = true;
     }
     if (data.treasure_found) {

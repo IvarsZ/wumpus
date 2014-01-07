@@ -98,34 +98,47 @@ Crafty.c("PlayerMovement", {
 
   init: function() {
 
-      this.movementDone = true
+    this.movementDone = true
 
-      // Maps keys to movement direction.
-      var keys = { 
-        UP_ARROW:     {row: -1, column:  0},
-        W:            {row: -1, column:  0},
-        DOWN_ARROW:   {row:  1, column:  0},
-        S:            {row:  1, column:  0},
-        LEFT_ARROW:   {row:  0, column: -1},
-        A:            {row:  0, column: -1},
-        RIGHT_ARROW:  {row:  0, column:  1},
-        D:            {row:  0, column:  1}
-      };
+    // Maps keys to movement direction.
+    var moveKeys = { 
+      UP_ARROW:     {row: -1, column:  0},
+      DOWN_ARROW:   {row:  1, column:  0},
+      LEFT_ARROW:   {row:  0, column: -1},
+      RIGHT_ARROW:  {row:  0, column:  1}
+    };
+    var shootKeys = { 
+      W:            {row: -1, column:  0},
+      S:            {row:  1, column:  0},
+      A:            {row:  0, column: -1},
+      D:            {row:  0, column:  1}
+    };
     
-    for(var key in keys) {
+    for(var key in moveKeys) {
       var keyCode = Crafty.keys[key] || key;
-      keys[keyCode] = keys[key];
+      moveKeys[keyCode] = moveKeys[key];
+    }
+
+    for(var key in shootKeys) {
+      var keyCode = Crafty.keys[key] || key;
+      shootKeys[keyCode] = shootKeys[key];
     }
 
     this.bind("KeyDown", function(e) {
 
-      if(keys[e.key] && !Game.sendingMove && this.movementDone && !Game.is_over) {
-         
-        var direction = keys[e.key];
+      if((moveKeys[e.key] || shootKeys[e.key]) && !Game.sendingMove && this.movementDone && !Game.is_over) {
 
-        this.movementDone = false;
-        this.trigger("SendMove", direction);
-        this.trigger("Slide", direction);
+        if (e.key in moveKeys) {
+          var direction = moveKeys[e.key];
+
+          this.movementDone = false;
+          this.trigger("SendMove", direction);
+          this.trigger("Slide", direction);
+        }
+        else if (e.key in shootKeys && this.numberOfArrows > 0) {
+          var direction = shootKeys[e.key];
+          this.trigger("SendShot", direction);
+        }  
       }
     })
   },
@@ -133,6 +146,16 @@ Crafty.c("PlayerMovement", {
   directionToAjaxMove: function(direction) {
     return {
       "move" : {
+        "row" : direction.row + this.getRow(),
+        "column" : direction.column + this.getColumn(),
+        "game_id" : Game.id
+      }
+    };
+  },
+
+  directionToAjaxShot: function(direction) {
+    return {
+      "shot" : {
         "row" : direction.row + this.getRow(),
         "column" : direction.column + this.getColumn(),
         "game_id" : Game.id
@@ -156,10 +179,28 @@ Crafty.c("Sender", {
         data : this.directionToAjaxMove(direction),
         success : function(response) {
           Game.sendingMove = false;
-          that.trigger("Receive", response);
+          that.trigger("ReceiveMove", response);
         },
         error: function(e) {
           // TODO pretty output
+          alert(JSON.stringify(e.responseJSON.errors));
+        }
+      });
+    });
+
+    this.bind("SendShot", function(direction) {
+
+      Game.sendingMove = true
+
+      $.ajax({
+        url : Game.urls.sendShot,
+        type : "POST",
+        data : this.directionToAjaxShot(direction),
+        success : function(response) {
+          Game.sendingMove = false;
+          that.trigger("ReceiveShot", response);
+        },
+        error: function(e) {
           alert(JSON.stringify(e.responseJSON.errors));
         }
       });
@@ -169,7 +210,8 @@ Crafty.c("Sender", {
 
 Crafty.c("Receiver", {
   init: function() {
-    this.bind("Receive", function(response) {
+
+    this.bind("ReceiveMove", function(response) {
       // Update only after movement is done.
       var updateNotifications = function() {
         Scenes.updateNotifications(response);
@@ -178,6 +220,18 @@ Crafty.c("Receiver", {
       this.bind("Update", updateNotifications);
       if (this.movementDone) {
         this.trigger("Update");
+      }
+    });
+
+    this.bind("ReceiveShot", function(response) {
+
+      this.numberOfArrows--;
+
+      if (response.wumpus_dead) {
+        Scenes.showText("You shot the wumpus");
+      }
+      else {
+        Scenes.showText("You missed, arrows left: " + this.numberOfArrows);
       }
     });
   }

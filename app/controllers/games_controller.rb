@@ -34,6 +34,10 @@ class GamesController < ApplicationController
       shot = Shot.new(shoot_params)
       shoot_service = Shoot.new(shot)
       if result = shoot_service.shoot
+        puts shoot_service.game.cave
+        puts shoot_service.game.number_of_arrows
+        puts Game.last.cave
+        puts Game.last.number_of_arrows 
         format.json { render json: result.as_json }
       else
         format.json { render json: { errors: shoot_service.errors.as_json }, status: :unprocessable_entity }

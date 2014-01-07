@@ -19,7 +19,11 @@ class Game < ActiveRecord::Base
   }
 
   def shoot(row, column)
+
+    self.number_of_arrows -= 1
+
     if get_cell(row, column) == CONTENTS[:wumpus]
+      self.cave_will_change!
       self.cave[self.cave.index(CONTENTS[:wumpus])] = CONTENTS[:empty]
       return { wumpus_dead: true }
     else

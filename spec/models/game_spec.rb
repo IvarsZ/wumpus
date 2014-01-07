@@ -248,6 +248,8 @@ describe Game do
 
   describe "shoot" do
 
+    let(:player) { { row: 1, column: 1 } }
+
     before do
       @game = Game.new(
         number_of_rows: 4,
@@ -268,6 +270,11 @@ describe Game do
     end
 
     subject { @game.shoot(shot[:row], shot[:column]) }
+
+    it "reduces number of arrows" do
+      @game.shoot(1, 2)
+      @game.number_of_arrows.should eq 0
+    end
 
     context "at wumpus" do
       let(:player) { { row: 1, column: 1 } }
