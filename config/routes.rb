@@ -4,6 +4,7 @@ Wumpus::Application.routes.draw do
 
   post "games/create"
   post "games/make_move"
+  post "games/make_shot"
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

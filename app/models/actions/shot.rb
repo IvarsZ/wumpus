@@ -1,0 +1,2 @@
+class Shot < Action
+end

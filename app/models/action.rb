@@ -1,4 +1,4 @@
-class Move < ActiveRecord::Base
+class Action < ActiveRecord::Base
   belongs_to :game
 
   validates :row, :column, :game_id, presence: true

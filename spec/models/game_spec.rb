@@ -245,4 +245,52 @@ describe Game do
       its([:by_bat]) { should include(:row, :column) }
     end
   end
+
+  describe "shoot" do
+
+    before do
+      @game = Game.new(
+        number_of_rows: 4,
+        number_of_columns: 4,
+        number_of_pits: 0,
+        number_of_bats: 0,
+        number_of_arrows: 1
+      )
+      @game.stub(:generate_cave) do
+        @game.cave = ".W.." \
+                     "...." \
+                     ".DP." \
+                     "...."
+        @game.player_row = player[:row]
+        @game.player_column = player[:column]
+      end
+      @game.save
+    end
+
+    subject { @game.shoot(shot[:row], shot[:column]) }
+
+    context "at wumpus" do
+      let(:player) { { row: 1, column: 1 } }
+      let(:shot) { { row: 0, column: 1 } }
+
+      it { should notify :wumpus_dead }
+
+      it "should kill wumpus" do
+        @game.shoot(shot[:row], shot[:column])
+        @game.cave.index(Game::CONTENTS[:wumpus]).should be_nil
+      end
+    end
+
+    context "at no wumpus" do
+      let(:player) { { row: 1, column: 1 } }
+      let(:shot) { Shot.new(row: 2, column: 1, game_id: @game.id) }
+
+      it { should_not notify :wumpus_dead }
+
+      it "should not kill wumpus" do
+        @game.shoot(shot[:row], shot[:column])
+        @game.cave.index(Game::CONTENTS[:wumpus]).should_not be_nil
+      end
+    end
+  end
 end

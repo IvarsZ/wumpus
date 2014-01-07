@@ -86,7 +86,56 @@ describe GamesController do
     end
 
     context "with unallowed move" do
-      let(:move_params) { { move: { row: 4, column: 4 } } }
+      let(:move_params) { { move: { row: 4, column: 4, game_id: @game.id } } }
+
+      it { assert_response :unprocessable_entity }
+    end
+  end
+
+  describe "making a shot with ajax" do
+
+    before do
+      @game = Game.new(
+        number_of_rows: 6,
+        number_of_columns: 6,
+        number_of_pits: 2,
+        number_of_bats: 1,
+        number_of_arrows: 1
+      )
+      @game.stub(:generate_cave) do
+        @game.cave = "......" \
+                     ".W..P." \
+                     "......" \
+                     ".TP.D." \
+                     "......" \
+                     ".B...."
+        @game.player_row = 1
+        @game.player_column = 2
+      end
+      @game.save
+
+      xhr :post, :make_shot, shot_params
+    end
+
+    context "with valid shot" do
+      let(:shot_params) { { shot: { row: 2, column: 2, game_id: @game.id } } }
+
+      it { assert_response :ok }
+
+      it "responds with wumpus dead notification" do
+        puts response.body.to_json
+        response.body.to_json.should include "wumpus_dead"
+      end
+    end
+
+    context "with missing params" do
+      let(:shot_params) { { shot: { shot: {} } } }
+
+      it { assert_response :unprocessable_entity }
+    end
+
+    context "with unallowed shot" do
+      let(:shot_params) { { shot: { row: 4, column: 4, game_id: @game.id } } }
 
       it { assert_response :unprocessable_entity }
     end

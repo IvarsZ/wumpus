@@ -28,6 +28,19 @@ class GamesController < ApplicationController
     end
   end
 
+  def make_shot
+
+    respond_to do |format|
+      shot = Shot.new(shoot_params)
+      shoot_service = Shoot.new(shot)
+      if result = shoot_service.shoot
+        format.json { render json: result.as_json }
+      else
+        format.json { render json: { errors: shoot_service.errors.as_json }, status: :unprocessable_entity }
+      end
+    end
+  end
+
   private
     
     def game_params
@@ -42,5 +55,9 @@ class GamesController < ApplicationController
 
     def move_params
       params.require(:move).permit(:row, :column, :game_id)
+    end
+
+    def shoot_params
+      params.require(:shot).permit(:row, :column, :game_id)
     end
 end

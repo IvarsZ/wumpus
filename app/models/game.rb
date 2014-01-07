@@ -1,5 +1,5 @@
 class Game < ActiveRecord::Base
-  has_many :moves
+  has_many :actions
 
   validates :number_of_rows,
             :number_of_columns,
@@ -17,6 +17,15 @@ class Game < ActiveRecord::Base
     wumpus:   "W",
     empty:    "."
   }
+
+  def shoot(row, column)
+    if get_cell(row, column) == CONTENTS[:wumpus]
+      self.cave[self.cave.index(CONTENTS[:wumpus])] = CONTENTS[:empty]
+      return { wumpus_dead: true }
+    else
+      return { wumpus_dead: false }
+    end
+  end
 
   def move_player(row, column)
     self.player_row = row

@@ -100,13 +100,14 @@ describe MakeMove do
     it { should_not be_valid }
   end
 
-  context "when player has found the treasure and the door" do
+  context "when player has found the treasure and is on the door" do
     let(:player) { { row: 2, column: 1 } }
     let(:move) { Move.new(row: 2, column: 1, game_id: @game.id) }
   
     before do
       @game.treasure_found = true
-      MakeMove.new(Move.new(row: 2, column:2)).make_move
+      @game.save
+      @move_service.game.reload
     end
 
     it { should_not be_valid }
