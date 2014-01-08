@@ -56,13 +56,15 @@ describe GamesController do
       )
       @game.stub(:generate_cave) do
         @game.cave = "......" \
-                     ".W..P." \
+                     "....P." \
                      "......" \
                      ".TP.D." \
                      "......" \
                      ".B...."
         @game.player_row = 2
         @game.player_column = 2
+        @game.wumpus_row = 1
+        @game.wumpus_column = 1
       end
       @game.save
 
@@ -104,13 +106,15 @@ describe GamesController do
       )
       @game.stub(:generate_cave) do
         @game.cave = "......" \
-                     ".W..P." \
+                     "....P." \
                      "......" \
                      ".TP.D." \
                      "......" \
                      ".B...."
         @game.player_row = 1
         @game.player_column = 2
+        @game.wumpus_row = 1
+        @game.wumpus_column = 1
       end
       @game.save
 

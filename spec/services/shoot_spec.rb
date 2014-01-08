@@ -14,12 +14,14 @@ describe Shoot do
       number_of_arrows: 1
     )
     @game.stub(:generate_cave) do
-      @game.cave = ".W.." \
+      @game.cave = "...." \
                    "...." \
                    ".DP." \
                    "...."
       @game.player_row = player[:row]
       @game.player_column = player[:column]
+      @game.wumpus_row = 0
+      @game.wumpus_column = 1
     end
     @game.save
 

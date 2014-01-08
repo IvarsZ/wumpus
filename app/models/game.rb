@@ -14,7 +14,6 @@ class Game < ActiveRecord::Base
     bat:      "B",
     door:     "D",
     treasure: "T",
-    wumpus:   "W",
     empty:    "."
   }
 
@@ -22,9 +21,9 @@ class Game < ActiveRecord::Base
 
     self.number_of_arrows -= 1
 
-    if get_cell(row, column) == CONTENTS[:wumpus]
-      self.cave_will_change!
-      self.cave[self.cave.index(CONTENTS[:wumpus])] = CONTENTS[:empty]
+    if row == self.wumpus_row && column == self.wumpus_column
+      self.wumpus_row = nil
+      self.wumpus_column = nil # remove his position to "kill" wumpus
       return { wumpus_dead: true }
     else
       return { wumpus_dead: false }
@@ -47,16 +46,16 @@ class Game < ActiveRecord::Base
   def get_notifications
 
     notifications = {}
-    adjacent_cells = get_adjacent_cells
+    adjacent_cells_content = get_adjacent_cells_content(self.player_row, self.player_column)
 
-    notifications[:nearby_wumpus] = adjacent_cells.include?(CONTENTS[:wumpus])
-    notifications[:nearby_pits] = adjacent_cells.include?(CONTENTS[:pit])
+    notifications[:nearby_wumpus] = get_adjacent_cells(self.player_row, self.player_column).include?({row: self.wumpus_row, column: self.wumpus_column})
 
-    notifications[:nearby_treasure] = !self.treasure_found? && adjacent_cells.include?(CONTENTS[:treasure])
+    notifications[:nearby_pits] = adjacent_cells_content.include?(CONTENTS[:pit])
+    notifications[:nearby_treasure] = !self.treasure_found? && adjacent_cells_content.include?(CONTENTS[:treasure])
     
     player_cell = get_cell(self.player_row, self.player_column)
 
-    if (player_cell == CONTENTS[:wumpus])
+    if (self.player_row == self.wumpus_row && self.player_column == self.wumpus_column)
       notifications[:on_wumpus] = true
     elsif (player_cell == CONTENTS[:pit])
       notifications[:on_pit] = true
@@ -104,8 +103,8 @@ class Game < ActiveRecord::Base
       generate_content(CONTENTS[:bat], number_of_bats)
       generate_content(CONTENTS[:door], 1)
       generate_content(CONTENTS[:treasure], 1)
-      generate_content(CONTENTS[:wumpus], 1)
 
+      add_wumpus
       add_player
     end
 
@@ -116,6 +115,13 @@ class Game < ActiveRecord::Base
       self.player_column = player_cell % self.number_of_columns
       self.player_start_row = self.player_row
       self.player_start_column = self.player_column
+    end
+
+    def add_wumpus
+
+      wumpus_cell = pop_empty_cell # TODO Add posibility to appear on treasure.
+      self.wumpus_row = wumpus_cell / self.number_of_columns
+      self.wumpus_column = wumpus_cell % self.number_of_columns
     end
 
     def pop_empty_cell
@@ -133,8 +139,7 @@ class Game < ActiveRecord::Base
       end
     end
 
-    def get_adjacent_cells
-
+    def get_adjacent_cells(row, column)
       adjacentCellsOffset = [
         {row: 0, column: -1},
         {row: 0, column: 1},
@@ -146,8 +151,8 @@ class Game < ActiveRecord::Base
 
       adjacentCellsOffset.each do |adjacentCellOffset|
           
-        adjacentRow = self.player_row + adjacentCellOffset[:row]
-        adjacentColumn = self.player_column + adjacentCellOffset[:column]
+        adjacentRow = row + adjacentCellOffset[:row]
+        adjacentColumn = column + adjacentCellOffset[:column]
         if adjacentRow < 0
           adjacentRow = self.number_of_rows - 1
         elsif adjacentRow >= self.number_of_rows
@@ -156,11 +161,17 @@ class Game < ActiveRecord::Base
           adjacentColumn = self.number_of_columns - 1
         elsif adjacentColumn >= self.number_of_columns
           adjacentColumn = 0
-        end    
+        end
 
-        adjacent_cells.push(get_cell(adjacentRow, adjacentColumn))
+        adjacent_cells.push({row: adjacentRow, column: adjacentColumn})
       end
 
-    adjacent_cells
-  end
+      adjacent_cells
+    end
+
+    def get_adjacent_cells_content(row, column)
+      get_adjacent_cells(row, column).map do |cell|
+        get_cell(cell[:row], cell[:column])
+      end
+    end
 end

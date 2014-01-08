@@ -76,8 +76,9 @@ describe Game do
       @game.cave.count(Game::CONTENTS[:treasure]).should be 1
     end
 
-    it "has wumpus" do
-      @game.cave.count(Game::CONTENTS[:wumpus]).should be 1
+    it "has wumpus with position" do
+      @game.wumpus_row.should_not be_nil
+      @game.wumpus_column.should_not be_nil
     end
 
     it "has correct number of pits" do
@@ -100,6 +101,9 @@ describe Game do
   end
 
   describe "move player" do
+    let(:player)  { { row: 1, column: 2 } }
+    let(:move_to) { { row: 2, column: 2 } }
+    let(:wumpus)  { { row: 1, column: 1 } }
 
     before do
     
@@ -112,19 +116,19 @@ describe Game do
       )
       @game.stub(:generate_cave) do
         @game.cave = "......" \
-                     ".W..P." \
+                     "....P." \
                      "P....." \
                      ".T..D." \
                      "......" \
                      ".B...."
         @game.player_row = player[:row]
         @game.player_column = player[:column]
+        @game.wumpus_row = wumpus[:row]
+        @game.wumpus_column = wumpus[:column]
       end
       @game.save
     end
-
-    let(:player)  { { row: 1, column: 2 } }
-    let(:move_to) { { row: 2, column: 2 } }
+    
     subject { @game.move_player(move_to[:row], move_to[:column]) }
 
     context "to empty cell with nothing around" do
@@ -146,6 +150,15 @@ describe Game do
       it { should notify :nearby_wumpus }
       it { should_not notify :nearby_pits }
       it { should_not notify :nearby_treasure }
+    end
+
+    context "to cell with wumpus nearby but on 'opposite side'" do
+
+      let(:player)  { { row: 0, column: 5 } }
+      let(:move_to) { { row: 1, column: 5 } }
+      let(:wumpus)  { { row: 1, column: 0 } }
+ 
+      it { should notify :nearby_wumpus }
     end
 
     context "to cell with only nearby pit" do
@@ -271,12 +284,14 @@ describe Game do
         number_of_arrows: 1
       )
       @game.stub(:generate_cave) do
-        @game.cave = ".W.." \
+        @game.cave = "...." \
                      "...." \
                      ".DP." \
                      "...."
         @game.player_row = player[:row]
         @game.player_column = player[:column]
+        @game.wumpus_row = 0
+        @game.wumpus_column = 1
       end
       @game.save
     end
@@ -296,7 +311,8 @@ describe Game do
 
       it "should kill wumpus" do
         @game.shoot(shot[:row], shot[:column])
-        @game.cave.index(Game::CONTENTS[:wumpus]).should be_nil
+        @game.wumpus_row.should be_nil
+        @game.wumpus_column.should be_nil
       end
     end
 
@@ -308,7 +324,8 @@ describe Game do
 
       it "should not kill wumpus" do
         @game.shoot(shot[:row], shot[:column])
-        @game.cave.index(Game::CONTENTS[:wumpus]).should_not be_nil
+        @game.wumpus_row.should_not be_nil
+        @game.wumpus_column.should_not be_nil
       end
     end
   end

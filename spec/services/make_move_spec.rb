@@ -15,13 +15,15 @@ describe MakeMove do
     )
     @game.stub(:generate_cave) do
       @game.cave = "...." \
-                   "..W." \
+                   "...." \
                    ".DP." \
                    "...."
       @game.player_row = player[:row]
       @game.player_column = player[:column]
       @game.player_start_row = player[:row]
       @game.player_start_column = player[:column]
+      @game.wumpus_row = 1
+      @game.wumpus_column = 2
     end
     @game.save
 
