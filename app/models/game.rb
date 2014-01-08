@@ -106,16 +106,16 @@ class Game < ActiveRecord::Base
       generate_content(CONTENTS[:treasure], 1)
       generate_content(CONTENTS[:wumpus], 1)
 
+      add_player
+    end
+
+    def add_player
+
       player_cell = pop_empty_cell
       self.player_row = player_cell / self.number_of_columns
       self.player_column = player_cell % self.number_of_columns
-    end
-
-    # Picks count cells from empty ones and generates the content there.
-    def generate_content(content, count)
-      count.times do
-        self.cave[pop_empty_cell] = content
-      end
+      self.player_start_row = self.player_row
+      self.player_start_column = self.player_column
     end
 
     def pop_empty_cell
@@ -124,6 +124,13 @@ class Game < ActiveRecord::Base
 
     def get_cell(row, column)
       return self.cave[row * number_of_columns + column] 
+    end
+
+    # Picks count cells from empty ones and generates the content there.
+    def generate_content(content, count)
+      count.times do
+        self.cave[pop_empty_cell] = content
+      end
     end
 
     def get_adjacent_cells

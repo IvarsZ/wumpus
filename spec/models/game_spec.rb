@@ -63,7 +63,7 @@ describe Game do
       @game.cave.should_not be_blank
     end
 
-    it "has player" do
+    it "has player with current position" do
       @game.player_row.should be
       @game.player_column.should be
     end
@@ -86,6 +86,16 @@ describe Game do
 
     it "has correct number of bats" do
       @game.cave.count(Game::CONTENTS[:bat]).should be @game.number_of_bats
+    end
+
+    it "has player's starting row and column" do
+      @game.player_start_row.should_not be_nil
+      @game.player_start_column.should_not be_nil
+    end
+    
+    it "the player's starting row and column matches the player's current row and column at the beginning" do
+      @game.player_row.should eq @game.player_start_row
+      @game.player_column.should eq @game.player_start_column
     end
   end
 
@@ -113,6 +123,8 @@ describe Game do
       @game.save
     end
 
+    let(:player)  { { row: 1, column: 2 } }
+    let(:move_to) { { row: 2, column: 2 } }
     subject { @game.move_player(move_to[:row], move_to[:column]) }
 
     context "to empty cell with nothing around" do

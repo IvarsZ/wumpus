@@ -20,6 +20,8 @@ describe MakeMove do
                    "...."
       @game.player_row = player[:row]
       @game.player_column = player[:column]
+      @game.player_start_row = player[:row]
+      @game.player_start_column = player[:column]
     end
     @game.save
 
@@ -47,6 +49,12 @@ describe MakeMove do
         @move_service.make_move
         @move_service.game.player_row.should eq @move_service.move.row
         @move_service.game.player_column.should eq @move_service.move.column
+      end
+
+      it "doesn't update player's starting position" do
+        @move_service.make_move
+        @game.player_start_row.should eq player[:row]
+        @game.player_start_column.should eq player[:column]
       end
     end
   end
