@@ -1,0 +1,185 @@
+commit 4cfdb3cd1d0927c63e52b163be387c80ac4c6b1c
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Wed Jan 8 18:34:45 2014 +0200
+
+    Add missing migration
+
+commit e47f008436348a0c0c506fd2f41b983233f7d526
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Wed Jan 8 18:34:20 2014 +0200
+
+    Use separate fields for wumpus position
+
+commit dcab4102103c84e6116b06790a7314ed96b7658a
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Wed Jan 8 16:32:42 2014 +0200
+
+    Record player's starting position
+
+commit dcec6edf95075deea9d710a117e79cc2892a3f02
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Wed Jan 8 15:55:17 2014 +0200
+
+    Add description to main page
+
+commit 921463e2d9fe1f5aedc9b1c825b476ca59d31fbb
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Tue Jan 7 20:52:47 2014 +0200
+
+    Shooting on client side
+
+commit ec1243e88cd8d0fd8f4a8ded6e83e255b5326873
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Tue Jan 7 15:49:48 2014 +0200
+
+    Shoot action and server code refactoring
+
+commit 70023c2abd2cbd226eb1cee982c3cfed36afb0fe
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Tue Jan 7 01:18:48 2014 +0200
+
+    Player movement animations
+
+commit 67766f92324b113223b72ceb25b37b7dd668b52a
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Mon Jan 6 21:05:23 2014 +0200
+
+    Add teleportation by bats and slow slide fix
+
+commit bdc355a3c63a1f411021d7c9be3e7770df88f32d
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Mon Jan 6 14:55:39 2014 +0200
+
+    Assets
+
+commit c9d0bec522652a780ff41c1470a1ec8da9e85a58
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Mon Jan 6 14:38:34 2014 +0200
+
+    Serve Static Assets in production
+
+commit 161df2a65a6d9b9a3e7eb7bdef9b9004424f1755
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Mon Jan 6 14:34:04 2014 +0200
+
+    Serve Static Assets
+
+commit 53eae70ff0c0b840c5c8a079470adf344d9b12f8
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Mon Jan 6 14:19:31 2014 +0200
+
+    Added ruby version
+
+commit e7ef79cd9ba079da38da9aa5e8285b60a8289fdb
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Mon Jan 6 14:08:24 2014 +0200
+
+    Proper graphics
+
+commit c31254710719adcfa428dcdfdbf9e607a0ed62d5
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Sun Jan 5 16:33:28 2014 +0200
+
+    Switched to canvas to fix player persistance bug
+
+commit 56455b5907a47d2aa70540989711e7770bc0549a
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Sat Jan 4 18:19:55 2014 +0200
+
+    Refactor notifications and process them on client
+
+commit b756aa4ef0067c6fd9ba426d73eabc18e0918746
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Fri Jan 3 23:32:28 2014 +0200
+
+    Bounds heck for moves on server
+
+commit 0421a2bc236114290c477ea217684b45b04be980
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Fri Jan 3 19:15:55 2014 +0200
+
+    Player movement with nearby notifications
+
+commit a1aace7f4e70b66ccca6b62a9455e1269e9c5e5d
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Fri Jan 3 14:27:05 2014 +0200
+
+    Server accepts moves
+
+commit 7af7e2042d97522db0a7a6c73ab0ab78bcb221ab
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Wed Jan 1 19:39:48 2014 +0200
+
+    Generate cave
+
+commit 0a04d3e94258526d2607b1aa98130ebba85bbc85
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Tue Dec 31 14:02:17 2013 +0200
+
+    Moved sql to test and dev only
+
+commit 3867547f50b23d58eab33316dd92904650807d1c
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Tue Dec 31 13:29:26 2013 +0200
+
+    Update Gemfile.lock for Heroku
+
+commit 309ba6a0dbdc816862a92561816195e3c16fdb0b
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Tue Dec 31 00:13:06 2013 +0200
+
+    add notification icons for nearby pits, wumpus and treasure
+
+commit a6b60dfd638483bfd7f60cac568d8f13a47edc1b
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Mon Dec 30 22:06:20 2013 +0200
+
+    Add more game params
+
+commit 856d113b7c2a947e983702fec044f2605763f8e2
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Mon Dec 30 21:24:10 2013 +0200
+
+    Connect to server on new game and record its params
+
+commit 1a0432eca93c887e86108de1f1862e02eb1d994b
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Mon Dec 30 16:17:52 2013 +0200
+
+    Working persistent menu with new game button and sliders to change parameters
+
+commit 8a40c3ac80f886174cb8ba4eb137dbe830f64aa0
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Mon Dec 30 14:12:30 2013 +0200
+
+    Keep player in bounds of the grid
+
+commit 1b8382be17a5d82e6bbf2e6ea62a686b307d9b2b
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Mon Dec 30 13:09:33 2013 +0200
+
+    Side and top bars for menu
+
+commit 1aec0b40dc02a35558987e21952d7a426e1c9976
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Mon Dec 30 02:51:48 2013 +0200
+
+    Player movement
+
+commit 59d1d5a7554e2e46789390bb39d36d03a1d05ada
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Sun Dec 29 20:21:17 2013 +0200
+
+    Stationary player character
+
+commit 010a4051fcc8911d7fb5cfb56ad7fa106a296d61
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Sun Dec 29 19:24:07 2013 +0200
+
+    Set screen width and height
+
+commit d238d33dc6ba4a8507386bc3c071d137d488c90e
+Author: IvarsZ <IZubkans@gmail.com>
+Date:   Sun Dec 29 17:38:45 2013 +0200
+
+    Setup

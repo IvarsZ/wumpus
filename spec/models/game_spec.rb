@@ -98,6 +98,16 @@ describe Game do
       @game.player_row.should eq @game.player_start_row
       @game.player_column.should eq @game.player_start_column
     end
+
+    it "has wumpu's starting row and column" do
+      @game.wumpus_start_row.should_not be_nil
+      @game.wumpus_start_column.should_not be_nil
+    end
+
+    it "the wumpu's starting row and column matches the wumpu's current row and column at the beginning" do
+      @game.wumpus_row.should eq @game.wumpus_start_row
+      @game.wumpus_column.should eq @game.wumpus_start_column
+    end
   end
 
   describe "move player" do

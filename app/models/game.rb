@@ -122,6 +122,8 @@ class Game < ActiveRecord::Base
       wumpus_cell = pop_empty_cell # TODO Add posibility to appear on treasure.
       self.wumpus_row = wumpus_cell / self.number_of_columns
       self.wumpus_column = wumpus_cell % self.number_of_columns
+      self.wumpus_start_row = self.wumpus_row
+      self.wumpus_start_column = self.wumpus_column
     end
 
     def pop_empty_cell
