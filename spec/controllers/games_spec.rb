@@ -123,7 +123,6 @@ describe GamesController do
       it { assert_response :ok }
 
       it "responds with wumpus dead notification" do
-        puts response.body.to_json
         response.body.to_json.should include "wumpus_dead"
       end
     end

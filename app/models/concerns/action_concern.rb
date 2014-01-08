@@ -34,8 +34,6 @@ module ActionConcern
         return false
       end
 
-      puts self.game.save
-
       self.action.save
 
       result
