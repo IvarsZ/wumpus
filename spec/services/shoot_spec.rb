@@ -168,6 +168,12 @@ describe Shoot do
         @shoot_service.game.wumpus_row.should_not be_nil
         @shoot_service.game.wumpus_column.should_not be_nil
       end
+      
+      it "records movement of wumpus" do
+        WumpusMove.count.should be(1)
+        @shoot_service.game.wumpus_moves.last.row.should eq @shoot_service.game.wumpus_row
+        @shoot_service.game.wumpus_moves.last.column.should eq @shoot_service.game.wumpus_column
+      end
 
       it "moves wumpus to adjacent cell" do
         wumpus_cell = { row: @shoot_service.game.wumpus_row, column: @shoot_service.game.wumpus_column }

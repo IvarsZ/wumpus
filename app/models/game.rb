@@ -1,5 +1,8 @@
 class Game < ActiveRecord::Base
   has_many :actions
+  has_many :moves
+  has_many :shots
+  has_many :wumpus_moves
 
   validates :number_of_rows,
             :number_of_columns,
@@ -47,6 +50,8 @@ class Game < ActiveRecord::Base
     move_to = get_adjacent_cells(self.wumpus_row, self.wumpus_column).sample
     self.wumpus_row = move_to[:row]
     self.wumpus_column = move_to[:column]
+
+    move_to
   end
   
   def get_notifications

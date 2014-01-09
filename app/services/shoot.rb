@@ -14,7 +14,8 @@ class Shoot
     make_in_bounds
     shoot_notifications = self.game.shoot(self.row, self.column)
     unless shoot_notifications[:wumpus_dead]
-      self.game.move_wumpus
+      moved_wumpus_to = self.game.move_wumpus
+      WumpusMove.create({row: moved_wumpus_to[:row], column: moved_wumpus_to[:column], game_id: self.game.id})
     end
 
     self.game.get_notifications.merge(shoot_notifications) 
