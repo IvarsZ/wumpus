@@ -12,7 +12,12 @@ class Shoot
 
   def execute_base
     make_in_bounds
-    self.game.shoot(self.row, self.column)
+    shoot_notifications = self.game.shoot(self.row, self.column)
+    unless shoot_notifications[:wumpus_dead]
+      self.game.move_wumpus
+    end
+
+    self.game.get_notifications.merge(shoot_notifications) 
   end
 
   def shoot

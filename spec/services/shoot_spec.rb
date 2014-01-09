@@ -2,7 +2,32 @@ require 'spec_helper'
 
 describe Shoot do
 
+  RSpec::Matchers.define :notify do |notification|
+    
+    match do |it|
+      it[notification]
+    end
+  end
+  
+  before do
+    @game = Game.new(
+      number_of_rows: 8,
+      number_of_columns: 12,
+      number_of_pits: 6,
+      number_of_bats: 4,
+      number_of_arrows: 2
+    )
+  end
+
+  RSpec::Matchers.define :be_in do |array|
+  
+    match do |value|
+      array.include?(value)
+    end
+  end
+
   let(:player) { { row: 1, column: 1 } }
+  let(:wumpus) { { row: 0, column: 1 } }
 
   before do
   
@@ -20,8 +45,8 @@ describe Shoot do
                    "...."
       @game.player_row = player[:row]
       @game.player_column = player[:column]
-      @game.wumpus_row = 0
-      @game.wumpus_column = 1
+      @game.wumpus_row = wumpus[:row]
+      @game.wumpus_column = wumpus[:column]
     end
     @game.save
 
@@ -108,5 +133,46 @@ describe Shoot do
     end
 
     it { should_not be_valid }
+  end
+
+  describe "outcome" do
+    let(:shot) { Shot.new(row: 1, column: 2, game_id: @game.id) }
+
+    before { @outcome = @shoot_service.shoot }
+
+    subject { @outcome }
+
+    it "reduces number of arrows" do
+      @shoot_service.game.number_of_arrows.should eq 0
+    end
+
+    context "at wumpus" do
+      let(:player) { { row: 1, column: 1 } }
+      let(:shot) { Shot.new(row: 0, column: 1, game_id: @game.id) }
+
+      it { should notify :wumpus_dead }
+
+      it "kills wumpus" do
+        @shoot_service.game.wumpus_row.should be_nil
+        @shoot_service.game.wumpus_column.should be_nil
+      end
+    end
+
+    context "at no wumpus" do
+      let(:player) { { row: 1, column: 1 } }
+      let(:shot) { Shot.new(row: 2, column: 1, game_id: @game.id) }
+
+      it { should_not notify :wumpus_dead }
+
+      it "doesn't kill wumpus" do
+        @shoot_service.game.wumpus_row.should_not be_nil
+        @shoot_service.game.wumpus_column.should_not be_nil
+      end
+
+      it "moves wumpus to adjacent cell" do
+        wumpus_cell = { row: @shoot_service.game.wumpus_row, column: @shoot_service.game.wumpus_column }
+        wumpus_cell.should be_in([{row: 0, column: 0}, {row: 0, column: 2}, {row: 1, column: 1}, {row: 3, column: 1}])
+      end
+    end
   end
 end

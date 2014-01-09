@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140108230052) do
+ActiveRecord::Schema.define(version: 20140109102058) do
 
   create_table "actions", force: true do |t|
     t.string   "type"
@@ -51,6 +51,11 @@ ActiveRecord::Schema.define(version: 20140108230052) do
   end
 
   create_table "shots", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "wumpus_moves", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
   end

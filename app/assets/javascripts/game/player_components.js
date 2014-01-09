@@ -233,6 +233,7 @@ Crafty.c("Receiver", {
       else {
         Scenes.showText("You missed, arrows left: " + this.numberOfArrows);
       }
+      Scenes.updateNotifications(response);
     });
   }
 });

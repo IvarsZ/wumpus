@@ -1,0 +1,2 @@
+class WumpusMove < Action
+end

@@ -42,6 +42,12 @@ class Game < ActiveRecord::Base
     
     get_notifications.merge(bat_notifications)
   end
+
+  def move_wumpus
+    move_to = get_adjacent_cells(self.wumpus_row, self.wumpus_column).sample
+    self.wumpus_row = move_to[:row]
+    self.wumpus_column = move_to[:column]
+  end
   
   def get_notifications
 
