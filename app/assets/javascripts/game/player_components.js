@@ -140,7 +140,17 @@ Crafty.c("PlayerMovement", {
           this.trigger("SendShot", direction);
         }  
       }
-    })
+    });
+    
+    this.bind("KeyDown", function(e) {
+    
+      if (e.key == Crafty.keys.ENTER && !Game.sendingMove && this.movementDone && !Game.is_over) {
+        this.movementDone = false;
+        var direction = AI.nextMove();
+        this.trigger("SendMove", direction);
+        this.trigger("Slide", direction);
+      }
+    });
   },
   
   directionToAjaxMove: function(direction) {

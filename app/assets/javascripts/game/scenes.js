@@ -27,6 +27,8 @@ Crafty.scene("Game", function() {
   else {
     Scenes.resizeTopBar(width - Game.sideBarWidth);
   }
+  
+  AI.init();
 
   Game.treasureFound = false;
   Game.is_over = false;
@@ -67,6 +69,7 @@ Scenes = {
         Game.player = Crafty.e("Player");
         Game.player.placeAt(response.row, response.column);
         Game.player.numberOfArrows = Game.params.numberOfArrows;
+        
         Scenes.updateNotifications(response.notifications);
       },
       error: function(e) {
@@ -78,6 +81,7 @@ Scenes = {
   },
 
   updateNotifications: function(data) {
+  
     Game.pitsIcon.visible = data.nearby_pits;
     Game.wumpusIcon.visible = data.nearby_wumpus;
     Game.treasureIcon.visible = data.nearby_treasure || Game.treasureFound;
@@ -91,7 +95,6 @@ Scenes = {
       Game.is_over = true;
     }
     if (data.treasure_found) {
-      // TODO Scenes.showText("You found the treasure");
       Game.treasureFound = true;
       Game.treasureIcon.visible = true;
       Game.treasureIcon.visible;
@@ -123,6 +126,9 @@ Scenes = {
 
       Game.player.unbind("BatTeleport");
     }
+    
+    // TODO Bats and recording.
+    AI.recordNotifications(data);
   },
 
   showText: function(text) {
