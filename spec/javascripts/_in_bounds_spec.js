@@ -6,19 +6,19 @@ describe("In Bounds", function() {
 
     // Mock ajax requests to server to start game.
     spyOn($, "ajax").and.callFake(function(options) {
-      Game.id = 1;
-      Crafty.scene('Game');
+      GameModel.id = 1;
+      Crafty.scene('GameModel');
     });
 
-    Game.tile.width = 32;
-    Game.tile.height = 32;
-    Game.sideBarWidth = 160;
-    Game.topBarHeight = 50;
+    GameModel.tile.width = 32;
+    GameModel.tile.height = 32;
+    GameModel.sideBarWidth = 160;
+    GameModel.topBarHeight = 50;
 
-    Game.params.numberOfRows = 8;
-    Game.params.numberOfColumns = 12;     
+    GameModel.params.rowsCount = 8;
+    GameModel.params.columnsCount = 12;
 
-    Game.start();
+    GameModel.start();
     inBoundsEntity = Crafty.e("Grid", "InBounds");
   });
 

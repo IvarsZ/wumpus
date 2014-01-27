@@ -10,15 +10,15 @@ Crafty.c("InBounds", {
       var column = this.getColumn();
 
       if (column < 0) {
-        column = Game.params.numberOfColumns - 1;
+        column = GameModel.params.columnsCount - 1;
       }
-      else if (column >= Game.params.numberOfColumns) {
+      else if (column >= GameModel.params.columnsCount) {
         column = 0;
       }
       else if (row< 0) {
-        row = Game.params.numberOfRows - 1;
+        row = GameModel.params.rowsCount - 1;
       }
-      else if (row >= Game.params.numberOfRows) {
+      else if (row >= GameModel.params.rowsCount) {
         row = 0;
       }
 
@@ -126,124 +126,30 @@ Crafty.c("PlayerMovement", {
 
     this.bind("KeyDown", function(e) {
 
-      if((moveKeys[e.key] || shootKeys[e.key]) && !Game.sendingMove && this.movementDone && !Game.is_over) {
+      if((moveKeys[e.key] || shootKeys[e.key]) && !GameModel.sendingMove && this.movementDone && !GameModel.is_over) {
 
         if (e.key in moveKeys) {
           var direction = moveKeys[e.key];
 
           this.movementDone = false;
-          this.trigger("SendMove", direction);
+          MoveService.sendMove(direction);
           this.trigger("Slide", direction);
         }
-        else if (e.key in shootKeys && this.numberOfArrows > 0) {
+        else if (e.key in shootKeys && this.arrowsCount > 0) {
           var direction = shootKeys[e.key];
-          this.trigger("SendShot", direction);
+          ShootService.sendShot(direction);
         }  
       }
     });
     
     this.bind("KeyDown", function(e) {
     
-      if (e.key == Crafty.keys.ENTER && !Game.sendingMove && this.movementDone && !Game.is_over) {
+      if (e.key == Crafty.keys.ENTER && !GameModel.sendingMove && this.movementDone && !GameModel.is_over) {
         this.movementDone = false;
         var direction = AI.nextMove();
-        this.trigger("SendMove", direction);
+        MoveService.sendMove(direction);
         this.trigger("Slide", direction);
       }
-    });
-  },
-  
-  directionToAjaxMove: function(direction) {
-    return {
-      "move" : {
-        "row" : direction.row + this.getRow(),
-        "column" : direction.column + this.getColumn(),
-        "game_id" : Game.id
-      }
-    };
-  },
-
-  directionToAjaxShot: function(direction) {
-    return {
-      "shot" : {
-        "row" : direction.row + this.getRow(),
-        "column" : direction.column + this.getColumn(),
-        "game_id" : Game.id
-      }
-    };
-  }
-});
-
-Crafty.c("Sender", {
-  init: function() {
-
-    var that = this;
-
-    this.bind("SendMove", function(direction) {
-
-      Game.sendingMove = true
-
-      $.ajax({
-        url : Game.urls.sendMove,
-        type : "POST",
-        data : this.directionToAjaxMove(direction),
-        success : function(response) {
-          Game.sendingMove = false;
-          that.trigger("ReceiveMove", response);
-        },
-        error: function(e) {
-          // TODO pretty output
-          alert(JSON.stringify(e.responseJSON.errors));
-        }
-      });
-    });
-
-    this.bind("SendShot", function(direction) {
-
-      Game.sendingMove = true
-
-      $.ajax({
-        url : Game.urls.sendShot,
-        type : "POST",
-        data : this.directionToAjaxShot(direction),
-        success : function(response) {
-          Game.sendingMove = false;
-          that.trigger("ReceiveShot", response);
-        },
-        error: function(e) {
-          alert(JSON.stringify(e.responseJSON.errors));
-        }
-      });
-    });
-  }
-});
-
-Crafty.c("Receiver", {
-  init: function() {
-
-    this.bind("ReceiveMove", function(response) {
-      // Update only after movement is done.
-      var updateNotifications = function() {
-        Scenes.updateNotifications(response);
-        this.unbind("Update", updateNotifications);
-      }
-      this.bind("Update", updateNotifications);
-      if (this.movementDone) {
-        this.trigger("Update");
-      }
-    });
-
-    this.bind("ReceiveShot", function(response) {
-
-      this.numberOfArrows--;
-
-      if (response.wumpus_dead) {
-        Scenes.showText("You shot the wumpus");
-      }
-      else {
-        Scenes.showText("You missed, arrows left: " + this.numberOfArrows);
-      }
-      Scenes.updateNotifications(response);
     });
   }
 });

@@ -6,17 +6,17 @@ describe("Slide", function() {
 
     // Mock ajax requests to server to start game.
     spyOn($, "ajax").and.callFake(function(options) {
-      Game.id = 1;
-      Crafty.scene('Game');
-      Game.sendingMove = false;
+      GameModel.id = 1;
+      Crafty.scene('GameModel');
+      GameModel.sendingMove = false;
     });
 
-    Game.tile.width = 32;
-    Game.tile.height = 32;
-    Game.sideBarWidth = 160;
-    Game.topBarHeight = 50;   
+    GameModel.tile.width = 32;
+    GameModel.tile.height = 32;
+    GameModel.sideBarWidth = 160;
+    GameModel.topBarHeight = 50;
 
-    Game.start();
+    GameModel.start();
     slideEntity = Crafty.e("Slide", "Grid").placeAt(1, 2);
 
     done();
@@ -28,7 +28,7 @@ describe("Slide", function() {
     var startY = slideEntity.y;
 
     var destinationX = startX;
-    var destinationY = startY - Game.tile.height;
+    var destinationY = startY - GameModel.tile.height;
 
     slideEntity.trigger("Slide", {row: -1, column: 0});
 
@@ -46,7 +46,7 @@ describe("Slide", function() {
     var startY = slideEntity.y;
 
     var destinationX = startX;
-    var destinationY = startY + Game.tile.height;
+    var destinationY = startY + GameModel.tile.height;
 
     slideEntity.trigger("Slide", {row: 1, column: 0});
 
@@ -63,7 +63,7 @@ describe("Slide", function() {
     var startX = slideEntity.x;
     var startY = slideEntity.y;
 
-    var destinationX = startX - Game.tile.width;
+    var destinationX = startX - GameModel.tile.width;
     var destinationY = startY;
 
     slideEntity.trigger("Slide", {row: 0, column: -1});
@@ -81,7 +81,7 @@ describe("Slide", function() {
     var startX = slideEntity.x;
     var startY = slideEntity.y;
 
-    var destinationX = startX + Game.tile.width;
+    var destinationX = startX + GameModel.tile.width;
     var destinationY = startY;
 
     slideEntity.trigger("Slide", {row: 0, column: 1});
@@ -100,7 +100,7 @@ describe("Slide", function() {
     var startY = slideEntity.y;
 
     var destinationX = startX;
-    var destinationY = startY - Game.tile.height;
+    var destinationY = startY - GameModel.tile.height;
 
     slideEntity.trigger("Slide", {row: -1, column: 0});
     slideEntity.trigger("Slide", {row: 1, column: 0});

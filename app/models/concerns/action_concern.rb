@@ -48,13 +48,13 @@ module ActionConcern
     def game_not_over?
       notifications = self.game.get_notifications
       if notifications[:on_pit] 
-        self.errors.add :base, "Game over: player is on pit"
+        self.errors.add :base, "GameModel over: player is on pit"
       end
       if notifications[:on_wumpus] 
-        self.errors.add :base, "Game over: player is on wumpus"
+        self.errors.add :base, "GameModel over: player is on wumpus"
       end
       if notifications[:game_won]
-         self.errors.add :base, "Game won: can't make any moves"
+         self.errors.add :base, "GameModel won: can't make any moves"
       end
     end
 

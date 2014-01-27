@@ -7,38 +7,10 @@ Game = {
     Crafty.init(544, 306);
     Crafty.background(Game.colors.background);
 
-    Crafty.scene('Loading');
-  },
-
-  // Stop and clear the game.
-  stop: function() {
-    Game.components = Crafty.components();
-    Crafty.stop(true);
-  },
-
-  params: {
-
-    numberOfRows: 8,
-    numberOfColumns: 12,
-    numberOfPits: 6,
-    numberOfBats: 4,
-    numberOfArrows: 2,
-
-    toAjaxData: function() {
-      return {
-        "game" : {
-          "number_of_rows" : this.numberOfRows,
-          "number_of_columns" : this.numberOfColumns,
-          "number_of_pits" : this.numberOfPits,
-          "number_of_bats" : this.numberOfBats,
-          "number_of_arrows" : this.numberOfArrows
-        }
-      };
-    }
+    Crafty.scene("Loading");
   },
 
   tile: {
-    
     width: 32,
     height: 32
   },
@@ -63,5 +35,9 @@ Game = {
     menuElements: 2,
     player: 1,
     door: 2
+  },
+
+  displayErrorResponse: function(e) {
+    alert(JSON.stringify(e.responseJSON.errors));
   }
 }

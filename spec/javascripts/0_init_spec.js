@@ -4,10 +4,10 @@ describe("Init", function() {
 
     // Mock ajax requests to server to start game.
     spyOn($, "ajax").and.callFake(function(options) {
-      Crafty.scene('Game');
+      Crafty.scene('GameModel');
     });  
 
-    Game.start();
+    GameModel.start();
   });
 
   it("inits tests to load assets", function() {});

@@ -4,44 +4,44 @@ describe("Top Bar", function() {
 
     // Mock ajax requests to server to start game.
     spyOn($, "ajax").and.callFake(function(options) {
-      Game.id = 1;
-      Crafty.scene('Game');
+      GameModel.id = 1;
+      Crafty.scene('GameModel');
     });
 
-    Game.tile.width = 32;
-    Game.tile.height = 32;
-    Game.sideBarWidth = 160;
-    Game.topBarHeight = 50;
+    GameModel.tile.width = 32;
+    GameModel.tile.height = 32;
+    GameModel.sideBarWidth = 160;
+    GameModel.topBarHeight = 50;
 
-    Game.params.numberOfRows = 8;
-    Game.params.numberOfColumns = 12;
-    Game.params.numberOfPits = 6;
-    Game.params.numberOfBats = 4;
-    Game.params.numberOfArrrows = 2;
+    GameModel.params.rowsCount = 8;
+    GameModel.params.columnsCount = 12;
+    GameModel.params.pitsCount = 6;
+    GameModel.params.batsCount = 4;
+    GameModel.params.numberOfArrrows = 2;
 
-    Scenes.createGame();
+    Service.createGame();
   });
 
   it("has correct width and height", function() {
-    expect(Game.topBar.w).toEqual(384);
-    expect(Game.topBar.h).toEqual(50);
+    expect(GameModel.topBar.w).toEqual(384);
+    expect(GameModel.topBar.h).toEqual(50);
   });
 
   it("is in correct position", function() {
-    expect(Game.topBar.x).toEqual(160);
-    expect(Game.topBar.y).toEqual(0);
+    expect(GameModel.topBar.x).toEqual(160);
+    expect(GameModel.topBar.y).toEqual(0);
   });
 
   it("has by default invisible nearby pits icon", function() {
-    expect(Game.pitsIcon.visible).toEqual(false);
+    expect(GameModel.pitsIcon.visible).toEqual(false);
   });
 
   it("has by default invisible nearby wumpus icon", function() {
-    expect(Game.wumpusIcon.visible).toEqual(false);
+    expect(GameModel.wumpusIcon.visible).toEqual(false);
   });
 
   it("has by default invisible nearby treasure icon", function() {
-    expect(Game.treasureIcon.visible).toEqual(false);
+    expect(GameModel.treasureIcon.visible).toEqual(false);
   });
 
   describe("with response pit notification", function() {
@@ -51,20 +51,20 @@ describe("Top Bar", function() {
       // Mock ajax request to pass notification data.
       $.ajax.and.callFake(function(options) {
 
-        Game.id = 1;
+        GameModel.id = 1;
         data = {
           "nearby_pits" : true
         }
 
-        Crafty.scene('Game');          
-        Scenes.updateNotifications(data);
+        Crafty.scene('GameModel');
+        Service.update(data);
       });
 
-      Scenes.createGame();
+      Service.createGame();
     });
     
     it("makes pit icon visible", function() {
-      expect(Game.pitsIcon.visible).toEqual(true);
+      expect(GameModel.pitsIcon.visible).toEqual(true);
     });
   });
 
@@ -75,20 +75,20 @@ describe("Top Bar", function() {
       // Mock ajax request to pass notification data.
       $.ajax.and.callFake(function(options) {
 
-        Game.id = 1;
+        GameModel.id = 1;
         data = {
           "nearby_wumpus" : true
         }
 
-        Crafty.scene('Game');          
-        Scenes.updateNotifications(data);
+        Crafty.scene('GameModel');
+        Service.update(data);
       });
 
-      Scenes.createGame();
+      Service.createGame();
     });
     
     it("makes wumpus icon visible", function() {
-      expect(Game.wumpusIcon.visible).toEqual(true);
+      expect(GameModel.wumpusIcon.visible).toEqual(true);
     });
   });
 
@@ -99,20 +99,20 @@ describe("Top Bar", function() {
       // Mock ajax request to pass notification data.
       $.ajax.and.callFake(function(options) {
 
-        Game.id = 1;
+        GameModel.id = 1;
         data = {
           "nearby_treasure" : true
         }
 
-        Crafty.scene('Game');          
-        Scenes.updateNotifications(data);
+        Crafty.scene('GameModel');
+        Service.update(data);
       });
 
-      Scenes.createGame();
+      Service.createGame();
     });
     
     it("makes treasure icon visible", function() {
-      expect(Game.treasureIcon.visible).toEqual(true);
+      expect(GameModel.treasureIcon.visible).toEqual(true);
     });
   });
 
@@ -126,29 +126,29 @@ describe("Top Bar", function() {
     beforeEach(function() {
 
       // Change slider values.
-      Game.rowsSlider.setValue(10);
-      Game.columnsSlider.setValue(10);
+      GameModel.rowsSlider.setValue(10);
+      GameModel.columnsSlider.setValue(10);
 
       // Keep old bars and icons.
-      oldTopBar = Game.topBar;
-      oldPitsIcon = Game.pitsIcon;
-      oldWumpusIcon = Game.wumpusIcon;
-      oldTreasureIcon = Game.treasureIcon;
+      oldTopBar = GameModel.topBar;
+      oldPitsIcon = GameModel.pitsIcon;
+      oldWumpusIcon = GameModel.wumpusIcon;
+      oldTreasureIcon = GameModel.treasureIcon;
 
       // Start new game.
-      Game.newGameButton.click();
+      GameModel.newGameButton.click();
     });
 
     it("is resized", function() {
-      expect(Game.topBar.w).toEqual(320);
-      expect(Game.topBar.h).toEqual(50);
+      expect(GameModel.topBar.w).toEqual(320);
+      expect(GameModel.topBar.h).toEqual(50);
     });
 
     it("is persistent and its notification icons are as well", function() {
-      expect(Game.topBar).toEqual(oldTopBar);
-      expect(Game.pitsIcon).toEqual(oldPitsIcon);
-      expect(Game.wumpusIcon).toEqual(oldWumpusIcon);
-      expect(Game.treasureIcon).toEqual(oldTreasureIcon);
+      expect(GameModel.topBar).toEqual(oldTopBar);
+      expect(GameModel.pitsIcon).toEqual(oldPitsIcon);
+      expect(GameModel.wumpusIcon).toEqual(oldWumpusIcon);
+      expect(GameModel.treasureIcon).toEqual(oldTreasureIcon);
     });
 
     describe("with response pit notification", function() {
@@ -158,20 +158,20 @@ describe("Top Bar", function() {
         // Mock ajax request to pass notification data.
         $.ajax.and.callFake(function(options) {
 
-          Game.id = 1;
+          GameModel.id = 1;
           data = {
             "nearby_pits" : true
           }
 
-          Crafty.scene('Game');          
-          Scenes.updateNotifications(data);
+          Crafty.scene('GameModel');
+          Service.update(data);
         });
 
-        Scenes.createGame();
+        Service.createGame();
       });
       
       it("makes pit icon visible", function() {
-        expect(Game.pitsIcon.visible).toEqual(true);
+        expect(GameModel.pitsIcon.visible).toEqual(true);
       });
     });
 
@@ -182,20 +182,20 @@ describe("Top Bar", function() {
         // Mock ajax request to pass notification data.
         $.ajax.and.callFake(function(options) {
 
-          Game.id = 1;
+          GameModel.id = 1;
           data = {
             "nearby_wumpus" : true
           }
 
-          Crafty.scene('Game');          
-          Scenes.updateNotifications(data);
+          Crafty.scene('GameModel');
+          Service.update(data);
         });
 
-        Scenes.createGame();
+        Service.createGame();
       });
       
       it("makes wumpus icon visible", function() {
-        expect(Game.wumpusIcon.visible).toEqual(true);
+        expect(GameModel.wumpusIcon.visible).toEqual(true);
       });
     });
 
@@ -206,20 +206,20 @@ describe("Top Bar", function() {
         // Mock ajax request to pass notification data.
         $.ajax.and.callFake(function(options) {
 
-          Game.id = 1;
+          GameModel.id = 1;
           data = {
             "nearby_treasure" : true
           }
 
-          Crafty.scene('Game');          
-          Scenes.updateNotifications(data);
+          Crafty.scene('GameModel');
+          Service.update(data);
         });
 
-        Scenes.createGame();
+        Service.createGame();
       });
       
       it("makes treasure icon visible", function() {
-        expect(Game.treasureIcon.visible).toEqual(true);
+        expect(GameModel.treasureIcon.visible).toEqual(true);
       });
     });
   });

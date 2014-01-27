@@ -10,11 +10,11 @@ AI = {
   init: function() {
   
     // Init cells.
-    this.cells = new Array(Game.params.numberOfRows);
-    for (var row = 0; row < Game.params.numberOfRows; row++) {
-      this.cells[row] = new Array(Game.params.numberOfColumns);
-      for (var column = 0; column < Game.params.numberOfColumns; column++) {
-        this.cells[row][column] = new Cell(row, column);
+    this.cells = new Array(GameModel.params.rowsCount);
+    for (var row = 0; row < GameModel.params.rowsCount; row++) {
+      this.cells[row] = new Array(GameModel.params.columnsCount);
+      for (var column = 0; column < GameModel.params.columnsCount; column++) {
+        this.cells[row][column] = new AICell(row, column);
       }
     }
     
@@ -26,8 +26,8 @@ AI = {
 
   recordNotifications: function(notifications) {
   
-    var row = Game.player.getRow();
-    var column = Game.player.getColumn();
+    var row = GameModel.player.getRow();
+    var column = GameModel.player.getColumn();
       
     var cell = this.getCell(row, column);
     if (!cell.isVisited) {
@@ -189,7 +189,7 @@ AI = {
     });
     
     var q = new Queue();
-    var playerCell = this.getCell(Game.player.getRow(), Game.player.getColumn());
+    var playerCell = this.getCell(GameModel.player.getRow(), GameModel.player.getColumn());
     playerCell.parent = null;
     q.enqueue(playerCell);
     
@@ -230,7 +230,7 @@ AI = {
     var maxVisitValue = -1000;
     safestCells.forEach(function(safestCell) {
       
-      var distance = Math.abs(safestCell.row - Game.player.getRow()) + Math.abs(safestCell.column - Game.player.getColumn()); // TODO use torus.
+      var distance = Math.abs(safestCell.row - GameModel.player.getRow()) + Math.abs(safestCell.column - GameModel.player.getColumn()); // TODO use torus.
       var value = that.getVisitValue(safestCell.row, safestCell.column) - distance;
       if (value > maxVisitValue) {
         bestCells = [];
@@ -345,15 +345,15 @@ AI = {
   
     // Make inbounds.
     if (column < 0) {
-      column = Game.params.numberOfColumns - 1;
+      column = GameModel.params.columnsCount - 1;
     }
-    else if (column >= Game.params.numberOfColumns) {
+    else if (column >= GameModel.params.columnsCount) {
       column = 0;
     }
     else if (row< 0) {
-      row = Game.params.numberOfRows - 1;
+      row = GameModel.params.rowsCount - 1;
     }
-    else if (row >= Game.params.numberOfRows) {
+    else if (row >= GameModel.params.rowsCount) {
       row = 0;
     }
   
@@ -361,7 +361,7 @@ AI = {
   }
 }
 
-function Cell(row, column) {
+function AICell(row, column) {
 
   this.row = row;
   this.column = column;
@@ -376,7 +376,7 @@ function Cell(row, column) {
 	this.treasureChance = 0;
 }
 
-Cell.prototype.getDangerValue = function() {
+AICell.prototype.getDangerValue = function() {
   value = this.pitChance * AI.PIT_DANGER;
   value += this.wumpusChance * AI.WUMPUS_DANGER;
   // TODO BATS.

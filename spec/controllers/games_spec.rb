@@ -18,7 +18,7 @@ describe GamesController do
       assert_response :ok
     end
 
-    it "should increment the Game count" do
+    it "should increment the GameModel count" do
       
       expect do
         xhr :post, :create, game_params

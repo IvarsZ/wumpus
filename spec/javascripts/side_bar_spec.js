@@ -4,55 +4,55 @@ describe("Side Bar", function() {
 
     // Mock ajax requests to server to start game.
     spyOn($, "ajax").and.callFake(function(options) {
-      Game.id = 1;
-      Crafty.scene('Game');
+      GameModel.id = 1;
+      Crafty.scene('GameModel');
     });
 
-    Game.tile.width = 32;
-    Game.tile.height = 32;
-    Game.sideBarWidth = 160;
-    Game.topBarHeight = 50;
+    GameModel.tile.width = 32;
+    GameModel.tile.height = 32;
+    GameModel.sideBarWidth = 160;
+    GameModel.topBarHeight = 50;
 
-    Game.params.numberOfRows = 8;
-    Game.params.numberOfColumns = 12;
-    Game.params.numberOfPits = 6;
-    Game.params.numberOfBats = 4;
-    Game.params.numberOfArrrows = 2;
+    GameModel.params.rowsCount = 8;
+    GameModel.params.columnsCount = 12;
+    GameModel.params.pitsCount = 6;
+    GameModel.params.batsCount = 4;
+    GameModel.params.numberOfArrrows = 2;
 
     // Reset sidebar.
-    Game.sideBar = undefined;
+    GameModel.sideBar = undefined;
   
-    Scenes.createGame();
+    Service.createGame();
   });
 
   it("has correct width and height", function() {
-    expect(Game.sideBar.w).toEqual(160);
-    expect(Game.sideBar.h).toEqual(306);
+    expect(GameModel.sideBar.w).toEqual(160);
+    expect(GameModel.sideBar.h).toEqual(306);
   });
 
   it("is in correct position", function() {
-    expect(Game.sideBar.x).toEqual(0);
-    expect(Game.sideBar.y).toEqual(0);
+    expect(GameModel.sideBar.x).toEqual(0);
+    expect(GameModel.sideBar.y).toEqual(0);
   });
 
   it("has rows slider with number of rows param", function() {
-    expect(Game.rowsSlider.getValue()).toEqual(8);
+    expect(GameModel.rowsSlider.getValue()).toEqual(8);
   });
 
   it("has columns slider with number of columns param", function() {
-    expect(Game.columnsSlider.getValue()).toEqual(12);
+    expect(GameModel.columnsSlider.getValue()).toEqual(12);
   });
 
   it("has pits slider with number of pits param", function() {
-    expect(Game.pitsSlider.getValue()).toEqual(6);
+    expect(GameModel.pitsSlider.getValue()).toEqual(6);
   });
 
   it("has bats slider with number of bats param", function() {
-    expect(Game.batsSlider.getValue()).toEqual(4);
+    expect(GameModel.batsSlider.getValue()).toEqual(4);
   });
 
   it("has arrows slider with number of arrows param", function() {
-    expect(Game.arrowsSlider.getValue()).toEqual(2);
+    expect(GameModel.arrowsSlider.getValue()).toEqual(2);
   });
 
   describe("on new game", function() {
@@ -68,35 +68,35 @@ describe("Side Bar", function() {
     beforeEach(function() {
 
       // Change slider values.
-      Game.rowsSlider.setValue(10);
-      Game.columnsSlider.setValue(10);
+      GameModel.rowsSlider.setValue(10);
+      GameModel.columnsSlider.setValue(10);
 
       // Keep old bars, sliders and buttons.
-      oldSideBar = Game.sideBar;
-      oldRowsSlider = Game.rowsSlider;
-      oldColumnsSlider = Game.columnsSlider;
-      oldPitsSlider = Game.pitsSlider;
-      oldBatsSlider = Game.batsSlider;
-      oldArrowsSlider = Game.arrowsSlider;
-      oldNewGameButton = Game.newGameButton;
+      oldSideBar = GameModel.sideBar;
+      oldRowsSlider = GameModel.rowsSlider;
+      oldColumnsSlider = GameModel.columnsSlider;
+      oldPitsSlider = GameModel.pitsSlider;
+      oldBatsSlider = GameModel.batsSlider;
+      oldArrowsSlider = GameModel.arrowsSlider;
+      oldNewGameButton = GameModel.newGameButton;
 
       // Start new game.
-      Game.newGameButton.click();
+      GameModel.newGameButton.click();
     });
 
     it("is resized", function() {
-      expect(Game.sideBar.w).toEqual(160);
-      expect(Game.sideBar.h).toEqual(370);
+      expect(GameModel.sideBar.w).toEqual(160);
+      expect(GameModel.sideBar.h).toEqual(370);
     });
 
     it("is persistent and its sliders and buttons are as well", function() {
-      expect(Game.sideBar).toEqual(oldSideBar);
-      expect(Game.rowsSlider).toEqual(oldRowsSlider);
-      expect(Game.columnsSlider).toEqual(oldColumnsSlider);
-      expect(Game.pitsSlider).toEqual(oldPitsSlider);
-      expect(Game.batsSlider).toEqual(oldBatsSlider);
-      expect(Game.arrowsSlider).toEqual(oldArrowsSlider);
-      expect(Game.newGameButton).toEqual(oldNewGameButton);
+      expect(GameModel.sideBar).toEqual(oldSideBar);
+      expect(GameModel.rowsSlider).toEqual(oldRowsSlider);
+      expect(GameModel.columnsSlider).toEqual(oldColumnsSlider);
+      expect(GameModel.pitsSlider).toEqual(oldPitsSlider);
+      expect(GameModel.batsSlider).toEqual(oldBatsSlider);
+      expect(GameModel.arrowsSlider).toEqual(oldArrowsSlider);
+      expect(GameModel.newGameButton).toEqual(oldNewGameButton);
     });
   });
 });

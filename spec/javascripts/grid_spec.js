@@ -6,16 +6,16 @@ describe("Grid component", function() {
 
     // Mock ajax requests to server to start game.
     spyOn($, "ajax").and.callFake(function(options) {
-      Game.id = 1;
-      Crafty.scene('Game');
+      GameModel.id = 1;
+      Crafty.scene('GameModel');
     });
 
-    Game.tile.width = 32;
-    Game.tile.height = 32;
-    Game.sideBarWidth = 160;
-    Game.topBarHeight = 50;
+    GameModel.tile.width = 32;
+    GameModel.tile.height = 32;
+    GameModel.sideBarWidth = 160;
+    GameModel.topBarHeight = 50;
 
-    Game.start();
+    GameModel.start();
     gridEntity = Crafty.e("Grid");
   });
 
@@ -35,10 +35,10 @@ describe("Grid component", function() {
    
     beforeEach(function() {
 
-      Game.tile.width = 40;
-      Game.tile.height = 50;
-      Game.sideBarWidth = 100;
-      Game.topBarHeight = 20;
+      GameModel.tile.width = 40;
+      GameModel.tile.height = 50;
+      GameModel.sideBarWidth = 100;
+      GameModel.topBarHeight = 20;
     });
     
     it("can be placed at row 0 and column 0", function() {

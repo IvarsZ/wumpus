@@ -86,3 +86,97 @@ Crafty.c("Button", {
     this.buttonHolder._element.children[0].click();
   }
 });
+
+Crafty.c("TopBar", {
+
+  init: function() {
+    this.requires("2D, DOM, Color, Persist");
+  },
+
+  topBar: function(width) {
+
+    this.attr({
+      x: Game.sideBarWidth,
+      y: 0,
+      w: width,
+      h: Game.topBarHeight,
+      z: Game.order.menuElements
+    });
+
+    this.color(Game.colors.topBar);
+
+    // Notification icons.
+    var iconPadding = 5;
+    var iconOffsetX = 50;
+    UI.pitsIcon = Crafty.e("PitIcon, Persist")
+      .attr({
+        x: Game.sideBarWidth + iconPadding,
+        y: iconPadding,
+        z: Game.order.menuElements
+      });
+    UI.pitsIcon.visible = false;
+
+    UI.wumpusIcon = Crafty.e("WumpusIcon, Persist")
+      .attr({
+        x: Game.sideBarWidth + iconPadding + iconOffsetX,
+        y: iconPadding,
+        z: Game.order.menuElements
+      });
+    UI.wumpusIcon.visible = false;
+
+    UI.treasureIcon = Crafty.e("ChestIcon, Persist")
+      .attr({
+        x: Game.sideBarWidth + iconPadding + 2 * iconOffsetX,
+        y: iconPadding,
+        z: Game.order.menuElements
+      });
+    UI.treasureIcon.visible = false;
+
+    return this;
+  }
+});
+
+Crafty.c("SideBar", {
+
+  init: function() {
+    this.requires("2D, DOM, Color, Persist");
+  },
+
+  sideBar: function(height) {
+
+    this.attr({
+      x: 0,
+      y: 0,
+      w: Game.sideBarWidth,
+      h: height,
+      z: Game.order.menuElements
+    });
+
+    this.color(Game.colors.sideBar);
+
+    // Sliders.
+    var sliderBarOffsetY = 40;
+    var sliderPadding = 13;
+
+    UI.rowsSlider = Crafty.e("Slider, Persist")
+      .slider(sliderPadding, 0, Game.sideBarWidth - 2 * sliderPadding - 3, 5, "No. of rows", GameModel.params.rowsCount, 8, 15);
+
+    UI.columnsSlider = Crafty.e("Slider, Persist")
+      .slider(sliderPadding, sliderBarOffsetY, Game.sideBarWidth - 2 * sliderPadding - 3, 5, "No. of columns", GameModel.params.columnsCount, 8, 15);
+
+    UI.pitsSlider = Crafty.e("Slider, Persist")
+      .slider(sliderPadding, 2 * sliderBarOffsetY, Game.sideBarWidth - 2 * sliderPadding - 3, 5, "No. of pits", GameModel.params.pitsCount, 0, 16);
+
+    UI.batsSlider = Crafty.e("Slider, Persist")
+      .slider(sliderPadding, 3 * sliderBarOffsetY, Game.sideBarWidth - 2 * sliderPadding - 3, 5, "No. of bats", GameModel.params.batsCount, 0, 16);
+
+    UI.arrowsSlider = Crafty.e("Slider, Persist")
+      .slider(sliderPadding, 4 * sliderBarOffsetY, Game.sideBarWidth - 2 * sliderPadding - 3, 5, "No. of arrows", GameModel.params.arrowsCount, 0, 16);
+
+    // Buttons.
+    var buttonPadding = 3;
+    UI.newGameButton = Crafty.e("Button, Persist").button(buttonPadding, 5 * sliderBarOffsetY, Game.sideBarWidth - 2 * buttonPadding - 1, 30, "New Game", NewGameService.execute());
+
+    return this;
+  }
+});
