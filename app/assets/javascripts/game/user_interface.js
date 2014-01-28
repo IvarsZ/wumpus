@@ -33,7 +33,6 @@ UI = {
     this.initTextLabel();
 
     UI.treasureIcon.close();
-    delete Service.textLabel;
 
     // TODO proper binding to scene, unbind.
     Crafty.bind("OnDoor", this.drawDoor);
@@ -41,7 +40,7 @@ UI = {
 
   initTextLabel: function() {
     if (this.textLabel === undefined) {
-      this.textLabel = Crafty.e("NotificationsLabel")
+      this.textLabel = Crafty.e("NotificationsLabel, 2D, DOM, Text")
         .attr({
           x: Game.sideBarWidth + 5,
           y: Game.topBarHeight - 18,
@@ -53,9 +52,9 @@ UI = {
     }
   },
 
-  drawDoor: function(row, column) {
+  drawDoor: function(position) {
     var door = Crafty.e("Door")
-      .placeAt(row, column)
+      .placeAt(position.row, position.column)
       .attr({z: Game.order.door});
   }
 }

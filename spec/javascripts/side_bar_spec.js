@@ -2,12 +2,6 @@ describe("Side Bar", function() {
 
   beforeEach(function() {
 
-    // Mock ajax requests to server to start game.
-    spyOn($, "ajax").and.callFake(function(options) {
-      GameModel.id = 1;
-      Crafty.scene('GameModel');
-    });
-
     GameModel.tile.width = 32;
     GameModel.tile.height = 32;
     GameModel.sideBarWidth = 160;
@@ -20,39 +14,39 @@ describe("Side Bar", function() {
     GameModel.params.numberOfArrrows = 2;
 
     // Reset sidebar.
-    GameModel.sideBar = undefined;
+    UI.sideBar = undefined;
   
-    Service.createGame();
+    Helper.newGame();
   });
 
   it("has correct width and height", function() {
-    expect(GameModel.sideBar.w).toEqual(160);
-    expect(GameModel.sideBar.h).toEqual(306);
+    expect(UI.sideBar.w).toEqual(160);
+    expect(UI.sideBar.h).toEqual(306);
   });
 
   it("is in correct position", function() {
-    expect(GameModel.sideBar.x).toEqual(0);
-    expect(GameModel.sideBar.y).toEqual(0);
+    expect(UI.sideBar.x).toEqual(0);
+    expect(UI.sideBar.y).toEqual(0);
   });
 
   it("has rows slider with number of rows param", function() {
-    expect(GameModel.rowsSlider.getValue()).toEqual(8);
+    expect(UI.rowsSlider.getValue()).toEqual(8);
   });
 
   it("has columns slider with number of columns param", function() {
-    expect(GameModel.columnsSlider.getValue()).toEqual(12);
+    expect(UI.columnsSlider.getValue()).toEqual(12);
   });
 
   it("has pits slider with number of pits param", function() {
-    expect(GameModel.pitsSlider.getValue()).toEqual(6);
+    expect(UI.pitsSlider.getValue()).toEqual(6);
   });
 
   it("has bats slider with number of bats param", function() {
-    expect(GameModel.batsSlider.getValue()).toEqual(4);
+    expect(UI.batsSlider.getValue()).toEqual(4);
   });
 
   it("has arrows slider with number of arrows param", function() {
-    expect(GameModel.arrowsSlider.getValue()).toEqual(2);
+    expect(UI.arrowsSlider.getValue()).toEqual(2);
   });
 
   describe("on new game", function() {
@@ -68,35 +62,35 @@ describe("Side Bar", function() {
     beforeEach(function() {
 
       // Change slider values.
-      GameModel.rowsSlider.setValue(10);
-      GameModel.columnsSlider.setValue(10);
+      UI.rowsSlider.setValue(10);
+      UI.columnsSlider.setValue(10);
 
       // Keep old bars, sliders and buttons.
-      oldSideBar = GameModel.sideBar;
-      oldRowsSlider = GameModel.rowsSlider;
-      oldColumnsSlider = GameModel.columnsSlider;
-      oldPitsSlider = GameModel.pitsSlider;
-      oldBatsSlider = GameModel.batsSlider;
-      oldArrowsSlider = GameModel.arrowsSlider;
-      oldNewGameButton = GameModel.newGameButton;
+      oldSideBar = UI.sideBar;
+      oldRowsSlider = UI.rowsSlider;
+      oldColumnsSlider = UI.columnsSlider;
+      oldPitsSlider = UI.pitsSlider;
+      oldBatsSlider = UI.batsSlider;
+      oldArrowsSlider = UI.arrowsSlider;
+      oldNewGameButton = UI.newGameButton;
 
       // Start new game.
-      GameModel.newGameButton.click();
+      UI.newGameButton.click();
     });
 
     it("is resized", function() {
-      expect(GameModel.sideBar.w).toEqual(160);
-      expect(GameModel.sideBar.h).toEqual(370);
+      expect(UI.sideBar.w).toEqual(160);
+      expect(UI.sideBar.h).toEqual(370);
     });
 
     it("is persistent and its sliders and buttons are as well", function() {
-      expect(GameModel.sideBar).toEqual(oldSideBar);
-      expect(GameModel.rowsSlider).toEqual(oldRowsSlider);
-      expect(GameModel.columnsSlider).toEqual(oldColumnsSlider);
-      expect(GameModel.pitsSlider).toEqual(oldPitsSlider);
-      expect(GameModel.batsSlider).toEqual(oldBatsSlider);
-      expect(GameModel.arrowsSlider).toEqual(oldArrowsSlider);
-      expect(GameModel.newGameButton).toEqual(oldNewGameButton);
+      expect(UI.sideBar).toEqual(oldSideBar);
+      expect(UI.rowsSlider).toEqual(oldRowsSlider);
+      expect(UI.columnsSlider).toEqual(oldColumnsSlider);
+      expect(UI.pitsSlider).toEqual(oldPitsSlider);
+      expect(UI.batsSlider).toEqual(oldBatsSlider);
+      expect(UI.arrowsSlider).toEqual(oldArrowsSlider);
+      expect(UI.newGameButton).toEqual(oldNewGameButton);
     });
   });
 });

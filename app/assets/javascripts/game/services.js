@@ -1,12 +1,12 @@
 NewGameService = {
 
   execute: function() {
-    this.updateGameParams();
+    NewGameService.updateGameParams();
     $.ajax({
       url : Game.urls.createGame,
       type : "POST",
       data : GameModel.params.toAjaxData(),
-      success : this.startNewGame,
+      success : NewGameService.startNewGame,
       error: Game.displayErrorResponse
     });
   },
@@ -27,6 +27,7 @@ NewGameService = {
     GameModel.player.placeAt(response.row, response.column);
     GameModel.player.arrowsCount = GameModel.params.arrowsCount;
 
+    Crafty.trigger("NewGame");
     Service.update(response.notifications);
   }
 }
@@ -85,15 +86,15 @@ ShootService = {
 
   finishShot: function(response) {
 
-    GameModel.sendingMove = true;
+    GameModel.sendingMove = false;
 
     GameModel.arrowsCount--;
 
     if (response.wumpus_dead) {
-      Service.showText("You shot the wumpus");
+      Crafty.trigger("ShotWumpus");
     }
     else {
-      Service.showText("You missed, arrows left: " + GameModel.arrowsCount);
+      Crafty.trigger("MissedWumpus");
     }
     Service.update(response);
   },
@@ -101,8 +102,8 @@ ShootService = {
   directionToAjaxShot: function(direction) {
     return {
       "shot" : {
-        "row" : direction.row + this.getRow(),
-        "column" : direction.column + this.getColumn(),
+        "row" : direction.row + GameModel.player.getRow(),
+        "column" : direction.column + GameModel.player.getColumn(),
         "game_id" : GameModel.id
       }
     };
@@ -115,29 +116,32 @@ Service = {
 
     Crafty.trigger("WumpusNearby", data.nearby_wumpus);
     Crafty.trigger("PitsNearby", data.nearby_pits);
-    Crafty.trigger("TreasureNearby", data.nearby_treasure);
+    if (!GameModel.treasureFound) {
+      Crafty.trigger("TreasureNearby", data.nearby_treasure);
+    }
 
     if (data.on_wumpus) {
-      Crafty.trigger("onWumpus");
-      GameModel.is_over = true;
+      Crafty.trigger("OnWumpus");
+      GameModel.isOver = true;
     }
 
     if (data.on_pit) {
-      Crafty.trigger("onPit");
-      GameModel.is_over = true;
+      Crafty.trigger("OnPit");
+      GameModel.isOver = true;
     }
 
     if (data.treasure_found) {
+      GameModel.treasureFound = true;
       Crafty.trigger("FoundTreasure");
     }
 
     if (data.on_door) {
-      Crafty.trigger("OnDoor", GameModel.player.getRow(), GameModel.player.getColumn());
+      Crafty.trigger("OnDoor", { row: GameModel.player.getRow(), column: GameModel.player.getColumn()});
     }
 
     if (data.game_won) {
       Crafty.trigger("GameWon");
-      GameModel.is_over = true;
+      GameModel.isOver = true;
     }
 
     if (!GameModel.isVisited[GameModel.player.getRow()][GameModel.player.getColumn()]) {

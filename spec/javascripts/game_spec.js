@@ -1,24 +1,16 @@
-describe("GameModel", function() {
+describe("Game", function() {
 
   beforeEach(function() {
 
-    // Mock ajax requests to server to start game.
-    spyOn($, "ajax").and.callFake(function(options) {     
-      Crafty.scene('GameModel');
-      GameModel.id = 1;
-      GameModel.player = Crafty.e("Player");
-      GameModel.player.placeAt(1, 1);
-    });
-
-    GameModel.tile.width = 32;
-    GameModel.tile.height = 32;
-    GameModel.sideBarWidth = 160;
-    GameModel.topBarHeight = 50;
+    Game.tile.width = 32;
+    Game.tile.height = 32;
+    Game.sideBarWidth = 160;
+    Game.topBarHeight = 50;
 
     GameModel.params.rowsCount = 8;
     GameModel.params.columnsCount = 12;
 
-    Service.createGame();
+    Helper.newGame();
   });
 
   it("has correct width and height", function() {
@@ -31,11 +23,11 @@ describe("GameModel", function() {
     beforeEach(function() {
 
       // Change slider values.
-      GameModel.rowsSlider.setValue(10);
-      GameModel.columnsSlider.setValue(10);
+      UI.rowsSlider.setValue(10);
+      UI.columnsSlider.setValue(10);
 
       // Start new game.
-      GameModel.newGameButton.click();
+      UI.newGameButton.click();
     });
 
     it("is resized", function() {

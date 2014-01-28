@@ -24,6 +24,7 @@ GameModel = {
   init: function() {
     this.treasureFound = false;
     this.isOver = false;
+    this.arrowsCount = this.params.arrowsCount;
 
     this.isVisited = new Array(GameModel.params.rowsCount);
     for (var i = 0; i < GameModel.params.rowsCount; i++) {

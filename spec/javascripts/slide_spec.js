@@ -4,19 +4,12 @@ describe("Slide", function() {
 
   beforeEach(function(done) {
 
-    // Mock ajax requests to server to start game.
-    spyOn($, "ajax").and.callFake(function(options) {
-      GameModel.id = 1;
-      Crafty.scene('GameModel');
-      GameModel.sendingMove = false;
-    });
-
     GameModel.tile.width = 32;
     GameModel.tile.height = 32;
     GameModel.sideBarWidth = 160;
     GameModel.topBarHeight = 50;
 
-    GameModel.start();
+    Helper.newGame();
     slideEntity = Crafty.e("Slide", "Grid").placeAt(1, 2);
 
     done();
@@ -28,7 +21,7 @@ describe("Slide", function() {
     var startY = slideEntity.y;
 
     var destinationX = startX;
-    var destinationY = startY - GameModel.tile.height;
+    var destinationY = startY - Game.tile.height;
 
     slideEntity.trigger("Slide", {row: -1, column: 0});
 
@@ -46,7 +39,7 @@ describe("Slide", function() {
     var startY = slideEntity.y;
 
     var destinationX = startX;
-    var destinationY = startY + GameModel.tile.height;
+    var destinationY = startY + Game.tile.height;
 
     slideEntity.trigger("Slide", {row: 1, column: 0});
 
@@ -63,7 +56,7 @@ describe("Slide", function() {
     var startX = slideEntity.x;
     var startY = slideEntity.y;
 
-    var destinationX = startX - GameModel.tile.width;
+    var destinationX = startX - Game.tile.width;
     var destinationY = startY;
 
     slideEntity.trigger("Slide", {row: 0, column: -1});
@@ -81,7 +74,7 @@ describe("Slide", function() {
     var startX = slideEntity.x;
     var startY = slideEntity.y;
 
-    var destinationX = startX + GameModel.tile.width;
+    var destinationX = startX + Game.tile.width;
     var destinationY = startY;
 
     slideEntity.trigger("Slide", {row: 0, column: 1});
@@ -100,7 +93,7 @@ describe("Slide", function() {
     var startY = slideEntity.y;
 
     var destinationX = startX;
-    var destinationY = startY - GameModel.tile.height;
+    var destinationY = startY - Game.tile.height;
 
     slideEntity.trigger("Slide", {row: -1, column: 0});
     slideEntity.trigger("Slide", {row: 1, column: 0});

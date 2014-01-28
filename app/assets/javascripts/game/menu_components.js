@@ -175,7 +175,7 @@ Crafty.c("SideBar", {
 
     // Buttons.
     var buttonPadding = 3;
-    UI.newGameButton = Crafty.e("Button, Persist").button(buttonPadding, 5 * sliderBarOffsetY, Game.sideBarWidth - 2 * buttonPadding - 1, 30, "New Game", NewGameService.execute());
+    UI.newGameButton = Crafty.e("Button, Persist").button(buttonPadding, 5 * sliderBarOffsetY, Game.sideBarWidth - 2 * buttonPadding - 1, 30, "New Game", NewGameService.execute);
 
     return this;
   }

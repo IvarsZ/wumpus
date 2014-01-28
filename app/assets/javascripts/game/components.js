@@ -90,6 +90,7 @@ Crafty.c("ChestIcon", {
   },
 
   foundTreasure: function() {
+
     this.visible = true;
     this.open();
   },
@@ -123,21 +124,16 @@ Crafty.c("Tile", {
 Crafty.c("NotificationsLabel", {
 
   init: function() {
-    this.requires("2D, DOM, Text");
-    this.bind("GameWon", this.gameWon);
-    this.bind("OnWumpus", this.onWumpus);
-    this.bind("OnPit", this.onPit)
-  },
 
-  gameWon: function() {
-    this.text("Game won: you found the treasure and the door");
-  },
+    var that = this;
 
-  onWumpus: function() {
-    this.text("Game over: wumpus ate you");
-  },
+    this.requires("2D, DOM, Text, Persist");
 
-  onPit: function() {
-    this.text("Game over: you fell into a lava pit");
+    Crafty.bind("GameWon", function() {that.text("Game won: you found the treasure and the door")});
+    Crafty.bind("OnWumpus", function() {that.text("Game over: wumpus ate you")});
+    Crafty.bind("OnPit", function() {that.text("Game over: you fell into a lava pit")});
+    Crafty.bind("ShotWumpus", function() {that.text("You shot the wumpus")});
+    Crafty.bind("MissedWumpus", function() { that.text("You missed, arrows left: " + GameModel.arrowsCount); });
+    Crafty.bind("NewGame", function() { that.text("") });
   }
 });

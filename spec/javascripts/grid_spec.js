@@ -4,18 +4,12 @@ describe("Grid component", function() {
 
   beforeEach(function() {
 
-    // Mock ajax requests to server to start game.
-    spyOn($, "ajax").and.callFake(function(options) {
-      GameModel.id = 1;
-      Crafty.scene('GameModel');
-    });
-
     GameModel.tile.width = 32;
     GameModel.tile.height = 32;
     GameModel.sideBarWidth = 160;
     GameModel.topBarHeight = 50;
 
-    GameModel.start();
+    Helper.newGame();
     gridEntity = Crafty.e("Grid");
   });
 

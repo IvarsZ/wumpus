@@ -2,11 +2,6 @@ describe("Player movement", function() {
 
   beforeEach(function(done) {
 
-    // Mock ajax requests to server to start game.
-    spyOn($, "ajax").and.callFake(function(options) {
-      GameModel.id = 1;
-    });
-
     GameModel.tile.width = 32;
     GameModel.tile.height = 32;
     GameModel.sideBarWidth = 160;
@@ -15,11 +10,8 @@ describe("Player movement", function() {
     GameModel.params.rowsCount = 8;
     GameModel.params.columnsCount = 12;
 
-    Service.createGame();
-    Crafty.scene('GameModel');
-    GameModel.player = Crafty.e("Player");
+    Helper.newGame();
     GameModel.player.placeAt(1, 2);
-    GameModel.sendingMove = false;
 
     done();
   });

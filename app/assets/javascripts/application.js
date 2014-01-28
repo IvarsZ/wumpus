@@ -15,4 +15,5 @@
 //= require turbolinks
 //= require crafty
 //= require jquery-ui-1.10.3.custom.min
+//= require Queue.compressed
 //= require_tree .

@@ -126,7 +126,7 @@ Crafty.c("PlayerMovement", {
 
     this.bind("KeyDown", function(e) {
 
-      if((moveKeys[e.key] || shootKeys[e.key]) && !GameModel.sendingMove && this.movementDone && !GameModel.is_over) {
+      if((moveKeys[e.key] || shootKeys[e.key]) && !GameModel.sendingMove && this.movementDone && !GameModel.isOver) {
 
         if (e.key in moveKeys) {
           var direction = moveKeys[e.key];
@@ -144,7 +144,7 @@ Crafty.c("PlayerMovement", {
     
     this.bind("KeyDown", function(e) {
     
-      if (e.key == Crafty.keys.ENTER && !GameModel.sendingMove && this.movementDone && !GameModel.is_over) {
+      if (e.key == Crafty.keys.ENTER && !GameModel.sendingMove && this.movementDone && !GameModel.isOver) {
         this.movementDone = false;
         var direction = AI.nextMove();
         MoveService.sendMove(direction);
